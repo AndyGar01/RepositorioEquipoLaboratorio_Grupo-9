@@ -236,15 +236,41 @@ async function MantenimientoUsuarios(){
 
 MantenimientoUsuarios();
 
-/*------------------------------------------------------------------CRUD DE PERMISOS------------------------------------------------------------------*/
+/*------------------------------------------------------------------CRUD DE MODULOS------------------------------------------------------------------*/
 
-async function MantenimientoPermisos(){
-    const respuesta = await fetch("API/Vista/Permisos/indexPERMISOS.php");
-    $(".contenedor_permiso").innerHTML = await respuesta.text();
+async function MantenimientoModulos(){
+    const respuesta = await fetch("API/Vista/Modulos/indexMODULOS.php");
+    $(".contenedor_modulo").innerHTML = await respuesta.text();
 
     const script = document.createElement("script");
-    script.src = "API/Vista/Permisos/scriptPERMISOS.js";
+    script.src = "API/Vista/Modulos/scriptMODULOS.js";
     document.body.appendChild(script);
 }
 
-MantenimientoPermisos();
+MantenimientoModulos();
+
+/*------------------------------------------------------------------CRUD DE PERFILES------------------------------------------------------------------*/
+
+async function MantenimientoPerfiles(){
+    const respuesta = await fetch("API/Vista/Perfiles/indexPERFILES.php");
+    $(".contenedor_perfil").innerHTML = await respuesta.text();
+
+    const script = document.createElement("script");
+    script.src = "API/Vista/Perfiles/scriptPERFILES.js";
+    document.body.appendChild(script);
+}
+
+MantenimientoPerfiles();
+
+/*------------------------------------------------------------------CRUD DE PERFILESMODULOS------------------------------------------------------------------*/
+
+async function MantenimientoPerfilModulo(){
+    const respuesta = await fetch("API/Vista/PerfilModulo/indexPERFILMODULO.php");
+    $(".contenedor_perfilmodulo").innerHTML = await respuesta.text();
+
+    const script = document.createElement("script");
+    script.src = "API/Vista/PerfilModulo/scriptPERFILMODULO.js";
+    document.body.appendChild(script);
+}
+
+MantenimientoPerfilModulo();
