@@ -1,3 +1,33 @@
+// -------------------- PROTECCION DE SESION ----------------------------
+(function verificarSesion() {
+    const TOKEN_KEY = "vitalab_token";
+    const API_LOGIN = "/SistemaLaboratorios/API/Controlador/C_Login.php";
+
+    const token = localStorage.getItem(TOKEN_KEY);
+
+    if (!token) {
+        window.location.replace("login.html");
+        return;
+    }
+
+    fetch(`${API_LOGIN}?token=${encodeURIComponent(token)}`, {
+        method: "GET",
+        cache: "no-store"
+    })
+    .then(function (r) { return r.json(); })
+    .then(function (respuesta) {
+        if (!respuesta.data || !respuesta.data.id) {
+            localStorage.removeItem(TOKEN_KEY);
+            localStorage.removeItem("vitalab_usuario");
+            window.location.replace("login.html");
+        }
+    })
+    .catch(function () {
+        window.location.replace("login.html");
+    });
+})();
+// ----------------------------------------------------------------------------------------------------------
+
 const Logo = document.getElementById("Logo");
 const barra_lateral = document.querySelector(".barra_lateral");
 const spans = document.querySelectorAll("span");
