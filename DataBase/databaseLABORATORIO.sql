@@ -162,6 +162,25 @@ CREATE TABLE permiso (
     CONSTRAINT pk_permiso PRIMARY KEY (id_permiso)
 );
 
+CREATE TABLE modulo (
+    id_modulo INT NOT NULL AUTO_INCREMENT,
+    nombre_modulo VARCHAR(100) NOT NULL,
+    descripcion_modulo VARCHAR(255),
+    CONSTRAINT pk_modulo PRIMARY KEY (id_modulo)
+);
+
+CREATE TABLE perfil_modulo (
+    id_perfil INT NOT NULL,
+    id_modulo INT NOT NULL,
+    permiso_ingresar TINYINT NOT NULL DEFAULT 0,
+    permiso_actualizar TINYINT NOT NULL DEFAULT 0,
+    permiso_eliminar TINYINT NOT NULL DEFAULT 0,
+    permiso_consultar TINYINT NOT NULL DEFAULT 0,
+    CONSTRAINT pk_perfil_modulo PRIMARY KEY (id_perfil, id_modulo),
+    CONSTRAINT fk_perfilmodulo_perfil FOREIGN KEY (id_perfil) REFERENCES perfil(id_perfil),
+    CONSTRAINT fk_perfilmodulo_modulo FOREIGN KEY (id_modulo) REFERENCES modulo(id_modulo)
+);
+
 CREATE TABLE perfil_permiso ( 
     id_perfil INT NOT NULL,
     id_permiso INT NOT NULL,
