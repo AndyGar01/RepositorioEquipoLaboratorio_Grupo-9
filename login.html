@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VitaLab Iniciar Sesion</title>
+    <link rel="stylesheet" href="styleLogin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="fondo-puntos"></div>
+
+    <div class="login-contenedor">
+        <div class="login-tarjeta">
+
+            <div class="login-logo">
+                <img src="images/logomov.gif" alt="VitaLab" class="logo-img">
+            </div>
+
+            <h2 class="login-titulo">Bienvenido</h2>
+            <p class="login-subtitulo">Ingresa tus credenciales para continuar</p>
+
+            <form id="formLogin" class="login-form" novalidate>
+
+                <div class="campo-grupo">
+                    <i class="fa-solid fa-envelope campo-icono"></i>
+                    <input
+                        type="email"
+                        id="correo"
+                        placeholder="Correo electronico"
+                        autocomplete="email"
+                    >
+                </div>
+
+                <div class="campo-grupo">
+                    <i class="fa-solid fa-lock campo-icono"></i>
+                    <input
+                        type="password"
+                        id="contrasena"
+                        placeholder="Contraseña"
+                        autocomplete="current-password"
+                    >
+                    <i class="fa-solid fa-eye ojo-icono" id="toggleContrasena"></i>
+                </div>
+
+                <div class="login-opciones">
+                    <label class="recordarme">
+                        <input type="checkbox" id="recordarme">
+                        <span>Recordarme</span>
+                    </label>
+                    <a href="#" class="olvidar-link">Olvidé mi contraseña</a>
+                </div>
+
+                <div id="mensajeError" class="mensaje-error oculto"></div>
+
+                <button type="submit" id="btnIngresar" class="btn-ingresar">
+                    <span id="btnTexto">INGRESAR</span>
+                    <span id="btnCargando" class="oculto">
+                        <i class="fa-solid fa-circle-notch fa-spin"></i>
+                    </span>
+                </button>
+
+            </form>
+        </div>
+    </div>
+
+    <script src="scriptLogin.js"></script>
+</body>
+</html>
