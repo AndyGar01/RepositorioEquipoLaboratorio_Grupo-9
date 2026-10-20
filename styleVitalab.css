@@ -416,21 +416,31 @@ section .wave.wave4 {
     background: #c6f4f4;         
 }
 
-#form {
+#form, #formPermiso, #formPerfilModulo, #formPerfiles, #formModulo, #formCarrera, #formAlumno {
     display: flex;
     flex-direction: column;  
     align-items: center;
     gap: 20px;              
 }
 
-.campos input {
+.campos input, select{
     padding: 12px 14px;      
     font-size: 15px;         
     width: 180px;           
 }
 
-#descripcion_permiso {
+.campos select{
+    padding: 12px 14px;      
+    font-size: 15px;         
+    width: 210px;           
+}
+
+#descripcion_modulo, #descripcion_perfil, #descripcion_carrera {
     width: 500px;
+}
+
+#correo_alumno, #correo_usuario {
+    width: 250px;
 }
 
 .botones button {

@@ -2,8 +2,12 @@
 <form id="formAlumno" class="formulario">
     <div class="campos">
         <input type="hidden" id="id_alumno">
-        <input id="id_carrera_alumno" placeholder="Id de la Carrera">
-        <input id="id_estado_alumno" placeholder="Id del Estado">
+        <select id="id_carrera_alumno">
+            <option value="">Seleccione una carrera</option>
+        </select>
+        <select id="id_estado_alumno">
+            <option value="">Seleccione un estado</option>
+        </select>
         <input id="carne_alumno" placeholder="Carnet" maxlength="10">
         <input id="nombre_alumno" placeholder="Nombre">
         <input id="apellido_alumno" placeholder="Apellido">

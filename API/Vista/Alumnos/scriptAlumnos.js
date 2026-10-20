@@ -1,23 +1,36 @@
 (function(){
 
 const API = "/SistemaLaboratorios/API/Controlador/C_Alumnos.php";
+const API_CARRERA_ALUMNO = "/SistemaLaboratorios/API/Controlador/C_CarreraAlumnos.php"
+const API_ESTADO_ALUMNO = "/SistemaLaboratorios/API/Controlador/C_EstadoAlumnos.php"
 let alumnos = [];
 
-async function accionAlumno(metodo, datos = null){
+async function accionAlumno(direccion, metodo, datos = null){
     let opciones = { method : metodo };
     if (datos !== null){
         opciones.body = new URLSearchParams(datos);
     }
-    let solicitud = await fetch(API, opciones);
+    let solicitud = await fetch(direccion, opciones);
     let respuesta = await solicitud.json();
     console.log(metodo, solicitud.status, respuesta);
     return respuesta;
 }
 
+//Esta función permite llenar el combo box con el estado del alumno
+async function LlenarCombo(direccion, id, textoInicial){
+    let lista = (await accionAlumno(direccion, "GET")).data;
+    let opciones = `<option value="">${textoInicial}</option>`;
+    for (let i = 0; i < lista.length; i++){
+        let v = Object.values(lista[i]);
+        opciones += `<option value="${v[0]}">${v[0]} - ${v[1]}</option>`;
+    }
+    $(id).innerHTML = opciones;
+}
+
 async function Cargar_Alumnos(){
     try {
         let tabla = $("#tablaAlumno");
-        let respuesta = await accionAlumno("GET");
+        let respuesta = await accionAlumno(API, "GET");
         alumnos = respuesta.data;
         let filas = "";
         for (let i=0; i<alumnos.length; i++){
@@ -57,10 +70,10 @@ async function Guardar_Alumno(evento){
             $("#id_alumno").value = "";
         } else {
             if ($("#id_alumno").value){
-                await accionAlumno("PUT", { id: $("#id_alumno").value, ...datos});
+                await accionAlumno(API, "PUT", { id: $("#id_alumno").value, ...datos});
                 alert(`Se actualizo el alumno ${$("#nombre_alumno").value} exitosamente`);
             } else {
-                await accionAlumno("POST", datos);
+                await accionAlumno(API, "POST", datos);
                 alert(`Se inserto el alumno ${$("#nombre_alumno").value} exitosamente`);
             }
             $("#formAlumno").reset();
@@ -75,7 +88,7 @@ async function Guardar_Alumno(evento){
 
 async function Eliminar(idAlumno){
     try {
-        await accionAlumno("DELETE", { id: idAlumno });
+        await accionAlumno(API, "DELETE", { id: idAlumno });
         Cargar_Alumnos();
     } catch (error) {
         console.error(error);
@@ -134,6 +147,8 @@ $("#tablaAlumno").addEventListener("click", (evento) => {
     Rellenar(fila.dataset.id);
 });
 
+LlenarCombo(API_CARRERA_ALUMNO, "#id_carrera_alumno", "Seleccione una carrera");
+LlenarCombo(API_ESTADO_ALUMNO, "#id_estado_alumno", "Seleccione un estado");
 Cargar_Alumnos();
 
 })();

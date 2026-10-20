@@ -1,21 +1,33 @@
-const API = "/SistemaLaboratorios/API/Controlador/C_Usuarios.php";
+const API_USUARIO = "/SistemaLaboratorios/API/Controlador/C_Usuarios.php";
+const API_PERFIL = "/SistemaLaboratorios/API/Controlador/C_Perfiles.php";
 let usuarios = [];
 
-async function accionUsuario(metodo, datos = null){
+async function accionUsuario(direccion, metodo, datos = null){
     let opciones = { method : metodo };
     if (datos !== null){
         opciones.body = new URLSearchParams(datos);
     }
-    let solicitud = await fetch(API, opciones);
+    let solicitud = await fetch(direccion, opciones);
     let respuesta = await solicitud.json();
     console.log(metodo, solicitud.status, respuesta);
     return respuesta;
 }
 
+//Esta función permite llenar el combo box con el estado del alumno
+async function LlenarCombo(direccion, id, textoInicial){
+    let lista = (await accionUsuario(direccion, "GET")).data;
+    let opciones = `<option value="">${textoInicial}</option>`;
+    for (let i = 0; i < lista.length; i++){
+        let v = Object.values(lista[i]);
+        opciones += `<option value="${v[0]}">${v[0]} - ${v[1]}</option>`;
+    }
+    $(id).innerHTML = opciones;
+}
+
 async function Cargar_Usuarios(){
     try {
         let tabla = $("#tabla");
-        let respuesta = await accionUsuario("GET");
+        let respuesta = await accionUsuario(API_USUARIO, "GET");
         usuarios = respuesta.data;
         let filas = "";
         for (let i=0; i<usuarios.length; i++){
@@ -55,10 +67,10 @@ async function Guardar_Usuario(evento){
             $("#id_usuario").value = "";
         } else {
             if ($("#id_usuario").value){
-            await accionUsuario("PUT", { id_usu: $("#id_usuario").value, ...datos});
+            await accionUsuario(API_USUARIO, "PUT", { id_usu: $("#id_usuario").value, ...datos});
             alert(`Se actualizo el usuario ${$("#nombre_usuario").value} exitosamente`);
             } else{
-                await accionUsuario("POST", datos);
+                await accionUsuario(API_USUARIO, "POST", datos);
                 alert(`Se inserto el usuario ${$("#nombre_usuario").value} exitosamente`);
             }
             $("#form").reset();
@@ -73,7 +85,7 @@ async function Guardar_Usuario(evento){
 
 async function Eliminar(idUsuario){
     try {
-        await accionUsuario("DELETE", { id_usu: idUsuario });
+        await accionUsuario(API_USUARIO, "DELETE", { id_usu: idUsuario });
         Cargar_Usuarios();
     } catch (error) {
         console.error(error);
@@ -132,4 +144,5 @@ $("#tabla").addEventListener("click", (evento) => {
     Rellenar(fila.dataset.id)
 })
 
+LlenarCombo(API_PERFIL, "#id_per_usuario", "Seleccione un perfil")
 Cargar_Usuarios();
