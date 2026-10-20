@@ -2,7 +2,9 @@
 <form id="form" class="formulario">
     <div class="campos">
         <input type="hidden" id="id_usuario">
-        <input id="id_per_usuario" placeholder="Id del Perfil">
+        <select id="id_per_usuario">
+            <option value="">Seleccione un perfil</option>
+        </select>
         <input id="carne_usuario" placeholder="Carnet">
         <input id="nombre_usuario" placeholder="Nombre">
         <input id="apellido_usuario" placeholder="Apellido">

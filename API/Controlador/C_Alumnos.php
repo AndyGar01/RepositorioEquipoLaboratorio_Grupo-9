@@ -33,7 +33,7 @@ switch ($method) {
             $user = new M_Alumnos($conection, $response);
             $user->INSERT_ALUMNO($_POST);
         } catch (\Throwable $th) {
-            $response->error("Error al agregar el alumno", 2002, 400);
+            $response->error("Error al agregar el alumno" . $th->getMessage(), 2002, 400);
             #$response->debug(null, $th);
         }
         break;
