@@ -199,30 +199,6 @@ SeptimoBoton.addEventListener("click",()=>{
     $("#SeptimaContenido").classList.remove("oculto");
 })
 
-async function pokedex(arrayid, contenedor) {
-    try {
-        let peticion = await fetch(`https://pokeapi.co/api/v2/pokemon/${arrayid}`);
-        let respuesta = await peticion.json();
-        let tarjeta = 
-        `<div class="tarjeta">
-            <p>Nombre del pokemon: ${respuesta.name}, Id: ${respuesta.id}</p>
-            <img src=${respuesta.sprites.other['official-artwork'].front_default} width="200">
-        </div>`;
-        contenedor.innerHTML += tarjeta;
-    } catch (error) {
-        alert("No se pudo encontrar al pokemon :(");
-    }
-}
-
-let pokemonAleatorio = (max) => {
-    let idAleatorio = Math.round(Math.random()*max);
-    return idAleatorio;
-}
-
-let contenedorSeptimo = $(".contenedor7");
-
-pokedex(pokemonAleatorio(100), contenedorSeptimo);
-
 /*------------------------------------------------------------------CRUD DE USUARIOS------------------------------------------------------------------*/
 
 async function MantenimientoUsuarios(){
@@ -274,3 +250,28 @@ async function MantenimientoPerfilModulo(){
 }
 
 MantenimientoPerfilModulo();
+
+/*------------------------------------------------------------------CRUD DE ALUMNOS------------------------------------------------------------------*/
+
+async function MantenimientoAlumnos(){
+    const respuesta = await fetch("API/Vista/Alumnos/indexAlumnos.php");
+    $(".contenedor_alumno").innerHTML = await respuesta.text();
+
+    const script = document.createElement("script");
+    script.src = "API/Vista/Alumnos/scriptAlumnos.js";
+    document.body.appendChild(script);
+}
+MantenimientoAlumnos();
+
+/*------------------------------------------------------------------CRUD DE CARRERAS------------------------------------------------------------------*/
+
+async function MantenimientoCarreras(){
+    const respuesta = await fetch("API/Vista/Carrera_Alumnos/indexCarrera_Alumnos.php");
+    $(".contenedor_carrera").innerHTML = await respuesta.text();
+
+    const script = document.createElement("script");
+    script.src = "API/Vista/Carrera_Alumnos/scriptCarrera_Alumnos.js";
+    document.body.appendChild(script);
+}
+
+MantenimientoCarreras();
