@@ -1,6 +1,6 @@
 (function(){
 
-const API = "/SistemaLaboratorios/API/Controlador/C_CarreraAlumnos.php";
+const API = "/RepositorioEquipoLaboratorio_Grupo-9/API/Controlador/C_CarreraAlumnos.php";
 let carreras = [];
 
 async function accionCarrera(metodo, datos = null){

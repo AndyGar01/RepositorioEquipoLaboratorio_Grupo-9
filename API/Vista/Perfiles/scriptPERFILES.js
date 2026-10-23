@@ -1,6 +1,6 @@
 (function(){
 
-const API = "/SistemaLaboratorios/API/Controlador/C_Perfiles.php";
+const API = "/RepositorioEquipoLaboratorio_Grupo-9/API/Controlador/C_Perfiles.php";
 let perfiles = [];
 
 async function accionPermiso(metodo, datos = null){
@@ -26,7 +26,8 @@ async function Cargar_Perfiles(){
             <td>${v[0]}</td>
             <td>${v[1]}</td>
             <td>${v[2]}</td>
-            <td>${v[3]}</td>`;
+            <td>${v[3]}</td>
+            </tr>`;  
         }
         tabla.innerHTML = filas;
     } catch (error) {

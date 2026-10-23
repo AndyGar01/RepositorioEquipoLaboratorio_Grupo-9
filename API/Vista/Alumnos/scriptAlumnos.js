@@ -1,8 +1,8 @@
 (function(){
 
-const API = "/SistemaLaboratorios/API/Controlador/C_Alumnos.php";
-const API_CARRERA_ALUMNO = "/SistemaLaboratorios/API/Controlador/C_CarreraAlumnos.php"
-const API_ESTADO_ALUMNO = "/SistemaLaboratorios/API/Controlador/C_EstadoAlumnos.php"
+const API = "/RepositorioEquipoLaboratorio_Grupo-9/API/Controlador/C_Alumnos.php";
+const API_CARRERA_ALUMNO = "/RepositorioEquipoLaboratorio_Grupo-9/API/Controlador/C_CarreraAlumnos.php"
+const API_ESTADO_ALUMNO = "/RepositorioEquipoLaboratorio_Grupo-9/API/Controlador/C_EstadoAlumnos.php"
 let alumnos = [];
 
 async function accionAlumno(direccion, metodo, datos = null){

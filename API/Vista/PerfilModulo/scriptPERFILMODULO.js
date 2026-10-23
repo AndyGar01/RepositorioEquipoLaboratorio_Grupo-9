@@ -1,8 +1,8 @@
 (function(){
 
-const API_PERFILMODULO = "/SistemaLaboratorios/API/Controlador/C_PerfilModulo.php";
-const API_PERFIL = "/SistemaLaboratorios/API/Controlador/C_Perfiles.php";
-const API_MODULO = "/SistemaLaboratorios/API/Controlador/C_Modulos.php";
+const API_PERFILMODULO = "/RepositorioEquipoLaboratorio_Grupo-9/API/Controlador/C_PerfilModulo.php";
+const API_PERFIL = "/RepositorioEquipoLaboratorio_Grupo-9/API/Controlador/C_Perfiles.php";
+const API_MODULO = "/RepositorioEquipoLaboratorio_Grupo-9/API/Controlador/C_Modulos.php";
 let permisos = [];
 
 async function accionPermiso(direccion, metodo, datos = null){
@@ -30,13 +30,28 @@ async function LlenarCombo(direccion, id, textoInicial){
 async function Cargar_PerfilModulo(){
     try {
         let respuesta = await accionPermiso(API_PERFILMODULO, "GET");
+        let perfil = (await accionPermiso(API_PERFIL, "GET")).data;
+        let modulo = (await accionPermiso(API_MODULO, "GET")).data;
+
+        let nombresPerfil = new Map(perfil.map(p => {
+            let v = Object.values(p);
+            return [String(v[0]), v[1]];
+        }));
+
+        let nombresModulo = new Map(modulo.map(p => {
+            let v = Object.values(p);
+            return [String(v[0]), v[1]];
+        })); 
+
         permisos = respuesta.data;
         let filas = "";
         for (let i = 0; i < permisos.length; i++){
             let v = Object.values(permisos[i]);
+            let nombrePerfil = nombresPerfil.get(String(v[0]));
+            let nombreModulo = nombresModulo.get(String(v[1]));
             filas += `<tr data-per="${v[0]}" data-mod="${v[1]}">
-                <td>${v[0]}</td>
-                <td>${v[1]}</td>
+                <td>${v[0]} - ${nombrePerfil}</td>
+                <td>${v[1]} - ${nombreModulo}</td>
                 <td>${v[2] == 1 ? "✔" : "✘"}</td>
                 <td>${v[3] == 1 ? "✔" : "✘"}</td>
                 <td>${v[4] == 1 ? "✔" : "✘"}</td>
