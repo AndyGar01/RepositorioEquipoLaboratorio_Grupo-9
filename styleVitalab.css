@@ -279,6 +279,10 @@ body {
     font-size: 13px;;
 }
 
+.barra_lateral .usuario .perfil {
+    font-size: 13px;;
+}
+
 .barra_lateral .usuario img {
     font-size: 20px;;
 }
@@ -427,6 +431,17 @@ section .wave.wave4 {
     padding: 12px 14px;      
     font-size: 15px;         
     width: 180px;           
+}
+
+.cerrarSesion{
+    padding: 12px;      
+    font-size: 15px;         
+    width: 180px;
+}
+
+.cerrarSesion:hover {
+    background-color: rgb(201, 89, 89);
+    color: white;
 }
 
 .campos select{

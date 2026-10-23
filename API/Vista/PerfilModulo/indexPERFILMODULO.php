@@ -15,8 +15,8 @@
         <label><input type="checkbox" id="consultar"> Permiso de consultar</label>
     </div>
     <div class="botones">
-        <button type="submit" id="Agregar_pm">Agregar/Modificar</button>
-        <button type="button" id="Eliminar_pm">Eliminar</button>
+        <button type="submit" id="Agregar_pm" class="AgregarModificar">Agregar/Modificar</button>
+        <button type="button" id="Eliminar_pm" class="Eliminar">Eliminar</button>
         <button type="button" id="Limpiar_pm">Limpiar</button>
     </div>
 </form>

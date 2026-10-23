@@ -6,8 +6,8 @@
         <input id="descripcion_modulo" placeholder="Descripción">
     </div>
     <div class="botones">
-        <button type="submit" id="Agregar_modulo">Agregar/Modificar</button>
-        <button type="button" id="Eliminar_modulo">Eliminar</button>
+        <button type="submit" id="Agregar_modulo" class="AgregarModificar">Agregar/Modificar</button>
+        <button type="button" id="Eliminar_modulo" class="Eliminar">Eliminar</button>
         <button type="button" id="Limpiar_modulo">Limpiar</button>
     </div>
 </form>

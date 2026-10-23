@@ -1,7 +1,7 @@
 // -------------------- PROTECCION DE SESION ----------------------------
 (function verificarSesion() {
     const TOKEN_KEY = "vitalab_token";
-    const API_LOGIN = "/SistemaLaboratorios/API/Controlador/C_Login.php";
+    const API_LOGIN = "/RepositorioEquipoLaboratorio_Grupo-9/API/Controlador/C_Login.php";
 
     const token = localStorage.getItem(TOKEN_KEY);
 
@@ -199,11 +199,38 @@ SeptimoBoton.addEventListener("click",()=>{
     $("#SeptimaContenido").classList.remove("oculto");
 })
 
+const usuarioData = JSON.parse(localStorage.getItem("vitalab_usuario"));
+$(".nombre").textContent = usuarioData.nombre;
+$(".email").textContent = usuarioData.correo;
+
+async function CargarNombrePerfil() {
+    let respuesta = await fetch("/SistemaLaboratorios/API/Controlador/C_Perfiles.php");
+    let datos = await respuesta.json();
+    let nombresPerfil = new Map(datos.data.map(p => {
+        return [String(p.id), p.nombre];
+    }));
+    let nombrePerfil = nombresPerfil.get(String(usuarioData.perfil));
+    $(".perfil").textContent = nombrePerfil ?? "Sin perfil";
+}
+
+CargarNombrePerfil();
+
+$(".cerrarSesion").addEventListener("click", () => {
+    if(confirm(`¿Está seguro de cerrar sesión siendo ${usuarioData.nombre}?`)){
+        localStorage.removeItem("vitalab_token");
+        localStorage.removeItem("vitalab_usuario");
+        window.location.replace("login.html");
+        return;
+    }
+});
+
 /*------------------------------------------------------------------CRUD DE USUARIOS------------------------------------------------------------------*/
 
 async function MantenimientoUsuarios(){
     const respuesta = await fetch("API/Vista/Usuarios/indexUSUARIOS.php");
     $(".contenedor_usuario").innerHTML = await respuesta.text();
+
+    VerificarModulo($(".contenedor_usuario"));
 
     const script = document.createElement("script");
     script.src = "API/Vista/Usuarios/scriptUSUARIOS.js";
@@ -231,6 +258,8 @@ async function MantenimientoPerfiles(){
     const respuesta = await fetch("API/Vista/Perfiles/indexPERFILES.php");
     $(".contenedor_perfil").innerHTML = await respuesta.text();
 
+    VerificarModulo($(".contenedor_perfil"));
+
     const script = document.createElement("script");
     script.src = "API/Vista/Perfiles/scriptPERFILES.js";
     document.body.appendChild(script);
@@ -256,6 +285,8 @@ MantenimientoPerfilModulo();
 async function MantenimientoAlumnos(){
     const respuesta = await fetch("API/Vista/Alumnos/indexAlumnos.php");
     $(".contenedor_alumno").innerHTML = await respuesta.text();
+
+    VerificarModulo($(".contenedor_alumno"));
 
     const script = document.createElement("script");
     script.src = "API/Vista/Alumnos/scriptAlumnos.js";

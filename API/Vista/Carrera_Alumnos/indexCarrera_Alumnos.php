@@ -6,8 +6,8 @@
         <input id="descripcion_carrera" placeholder="Descripcion">
     </div>
     <div class="botones">
-        <button type="submit" id="Agregar_carrera">Agregar/Modificar</button>
-        <button type="button" id="Eliminar_carrera">Eliminar</button>
+        <button type="submit" id="Agregar_carrera" class="AgregarModificar">Agregar/Modificar</button>
+        <button type="button" id="Eliminar_carrera" class="Eliminar">Eliminar</button>
         <button type="button" id="Limpiar_carrera">Limpiar</button>
     </div>
 </form>

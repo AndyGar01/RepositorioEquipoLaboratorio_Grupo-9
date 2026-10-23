@@ -1,5 +1,5 @@
-const API_USUARIO = "/SistemaLaboratorios/API/Controlador/C_Usuarios.php";
-const API_PERFIL = "/SistemaLaboratorios/API/Controlador/C_Perfiles.php";
+const API_USUARIO = "/RepositorioEquipoLaboratorio_Grupo-9/API/Controlador/C_Usuarios.php";
+const API_PERFIL = "/RepositorioEquipoLaboratorio_Grupo-9/API/Controlador/C_Perfiles.php";
 let usuarios = [];
 
 async function accionUsuario(direccion, metodo, datos = null){

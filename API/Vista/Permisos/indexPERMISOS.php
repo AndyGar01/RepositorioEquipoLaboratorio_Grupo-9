@@ -6,8 +6,8 @@
         <input id="descripcion_permiso" placeholder="Descripcion">
     </div>
     <div class="botones">
-        <button type="submit" id="Agregar_permiso">Agregar/Modificar</button>
-        <button type="button" id="Eliminar_permiso">Eliminar</button>
+        <button type="submit" id="Agregar_permiso" class="AgregarModificar">Agregar/Modificar</button>
+        <button type="button" id="Eliminar_permiso" class="Eliminar">Eliminar</button>
         <button type="button" id="Limpiar_permiso">Limpiar</button>
     </div>
 </form>

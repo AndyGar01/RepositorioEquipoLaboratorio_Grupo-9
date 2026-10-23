@@ -1,5 +1,5 @@
 (function () {
-    const API       = "/SistemaLaboratorios/API/Controlador/C_Login.php";
+    const API       = "/RepositorioEquipoLaboratorio_Grupo-9/API/Controlador/C_Login.php";
     const TOKEN_KEY = "vitalab_token";
 
     // Si ya hay sesion activa, ir directo al sistema

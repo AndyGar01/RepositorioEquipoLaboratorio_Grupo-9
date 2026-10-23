@@ -1,6 +1,6 @@
 (function(){
 
-const API = "/SistemaLaboratorios/API/Controlador/C_Modulos.php";
+const API = "/RepositorioEquipoLaboratorio_Grupo-9/API/Controlador/C_Modulos.php";
 let modulos = [];
 
 async function accionPermiso(metodo, datos = null){
