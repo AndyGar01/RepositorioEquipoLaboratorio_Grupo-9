@@ -2,13 +2,36 @@
 require_once(__DIR__ . "/../core/Connection.php");
 require_once(__DIR__ . "/../Modelo/M_Alumnos.php");
 require_once(__DIR__ . "/../core/Response.php");
+require_once(__DIR__ . "/../Core/Permisos.php");
 
 $conection = new Connection();
 $response = new Response();
+$permisos = new Permisos($conection);
 $method = $_SERVER['REQUEST_METHOD'];
+
+if (!isset($_SESSION['id_usuario'], $_SESSION['id_perfil'])) {
+    $response->error(
+        "Debes iniciar sesión para acceder.",
+        2005,
+        401
+    );
+    exit;
+}
+
+$id_perfil = $_SESSION['id_perfil'];
+$id_modulo = 5;
 
 parse_str(file_get_contents("php://input"), $_PUT);
 parse_str(file_get_contents("php://input"), $_DELETE);
+
+if (!$permisos->verificar($id_perfil, $id_modulo, $method)) {
+    $response->error(
+        "No tienes permisos para realizar esta operación.",
+        2006,
+        403
+    );
+    exit;
+}
 
 switch ($method) {
     case 'GET':
