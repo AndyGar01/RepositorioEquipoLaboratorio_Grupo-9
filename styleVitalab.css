@@ -8,7 +8,7 @@
     --color-boton-texto: #FFFFFF;
     --color-boton: #068988;
     --color-menu-hover: #043D59;
-    --color-menu-hover-texto: #000000;
+    --color-menu-hover-texto: #6e7c7c;
     --color-scroll: #FFFFFF;
     --color-scroll-hover: #068988;
     --color-linea: #FFFFFF;
@@ -177,7 +177,7 @@ body {
 }
 
 .barra_lateral .navegacion img {
-    min-width: 50px;
+    min-width: 40px;
     font-size: 20px;
 }
 
@@ -433,15 +433,38 @@ section .wave.wave4 {
     width: 180px;           
 }
 
-.cerrarSesion{
-    padding: 12px;      
-    font-size: 15px;         
-    width: 180px;
+.cerrarSesion {
+    width: 100%;
+    height: 45px;
+    padding: 10px;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.cerrarSesion img {
+    width: 25px;
+    height: 25px;
+    object-fit: contain;
+}
+
+.barra_lateral.mini_barra_lateral .cerrarSesion {
+    width: 45px;
+    height: 45px;
+    padding: 5px;
+    font-size: 0;
+    padding: 10px;
 }
 
 .cerrarSesion:hover {
     background-color: rgb(201, 89, 89);
     color: white;
+}
+
+.barra_lateral.mini_barra_lateral .textoCerrar {
+    display: none;
 }
 
 .campos select{
