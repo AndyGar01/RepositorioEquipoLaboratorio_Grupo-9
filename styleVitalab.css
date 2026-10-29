@@ -46,7 +46,7 @@ html {
 }
 body {
     border: 5px solid #043D59;
-    height: 100vh;
+    min-height: 100vh;
     width: 100%; 
     background-color: #FFFFFF;
 }
@@ -427,7 +427,7 @@ section .wave.wave4 {
     gap: 20px;              
 }
 
-.campos input, select{
+.campos input, .campos select{
     padding: 12px 14px;      
     font-size: 15px;         
     width: 180px;           
@@ -530,8 +530,74 @@ section .wave.wave4 {
             width: 0;
         }
     }
-    section {
-        height: 66vh;
+}
+
+.campos, .botones {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.campos input, .campos select {
+    max-width: 100%;
+}
+
+@media (max-width: 900px) {
+    .contenido {
+        display: block;
+        width: fit-content;
+        max-width: 100%;
+        overflow-x: auto; 
     }
 }
 
+.titulo {
+    font-size: clamp(26px, 6vw, 50px);
+}
+
+section .wave {
+    pointer-events: none;
+}
+
+@media (max-width: 600px) {
+    main {
+        padding-top: 75px;
+    }
+
+    .campos input, .campos select {
+        width: 250px;
+        max-width: 250px;
+    }
+}
+
+section .wave.wave1 { z-index: -1; }
+section .wave.wave2 { z-index: -2; }
+section .wave.wave3 { z-index: -3; }
+section .wave.wave4 { z-index: -4; }
+
+.campos input[type="checkbox"] {
+    width: auto;
+    padding: 0;
+}
+
+@media (max-width: 600px) {
+    .contenido:has(#tabla) :is(th, td):is(:nth-child(1), :nth-child(2), :nth-child(3), :nth-child(8)) {
+        display: none;
+    }
+    .contenido:has(#tablaAlumno) :is(th, td):is(:nth-child(1), :nth-child(2), :nth-child(3), :nth-child(8)) {
+        display: none;
+    }
+}
+
+@media (max-width: 600px) {
+    main {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .contenido th, .contenido td {
+        padding: 5px 4px;
+        font-size: 11px;
+    }
+}
