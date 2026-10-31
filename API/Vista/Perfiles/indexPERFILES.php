@@ -1,4 +1,4 @@
-<div id="contenidoModulo" data-modulo="7"> 
+<div id="contenidoModulo" data-modulo="2"> 
     <h1 class="titulo">Mantenimiento de Perfiles</h1><br>
     <form id="formPerfiles" class="formulario">
         <div class="campos">
