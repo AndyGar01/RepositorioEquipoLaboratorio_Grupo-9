@@ -273,6 +273,8 @@ async function MantenimientoPerfilModulo(){
     const respuesta = await fetch("API/Vista/PerfilModulo/indexPERFILMODULO.php");
     $(".contenedor_perfilmodulo").innerHTML = await respuesta.text();
 
+    VerificarModulo($(".contenedor_perfilmodulo"));
+
     const script = document.createElement("script");
     script.src = "API/Vista/PerfilModulo/scriptPERFILMODULO.js";
     document.body.appendChild(script);
@@ -299,6 +301,8 @@ MantenimientoAlumnos();
 async function MantenimientoCarreras(){
     const respuesta = await fetch("API/Vista/Carrera_Alumnos/indexCarrera_Alumnos.php");
     $(".contenedor_carrera").innerHTML = await respuesta.text();
+
+    VerificarModulo($(".contenedor_carrera"));    
 
     const script = document.createElement("script");
     script.src = "API/Vista/Carrera_Alumnos/scriptCarrera_Alumnos.js";

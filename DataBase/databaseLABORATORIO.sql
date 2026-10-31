@@ -239,12 +239,11 @@ CREATE TABLE bitacora (
 );
 
 INSERT INTO modulo(id_modulo, nombre_modulo, descripcion_modulo) VALUES (1, 'Usuarios', 'Tabla maestra de usuarios.');
-INSERT INTO modulo(id_modulo, nombre_modulo, descripcion_modulo) VALUES (2, 'Módulos', 'Tabla maestra de módulos.');
-INSERT INTO modulo(id_modulo, nombre_modulo, descripcion_modulo) VALUES (3, 'Perfiles', 'Tabla maestra de perfiles.');
-INSERT INTO modulo(id_modulo, nombre_modulo, descripcion_modulo) VALUES (4, 'Permisos', 'Tabla maestra de permisos.');
-INSERT INTO modulo(id_modulo, nombre_modulo, descripcion_modulo) VALUES (5, 'Alumnos', 'Tabla maestra de alumnos.');
-INSERT INTO modulo(id_modulo, nombre_modulo, descripcion_modulo) VALUES (6, 'Carreras', 'Tabla maestra de carreras.');
-INSERT INTO modulo(id_modulo, nombre_modulo, descripcion_modulo) VALUES (7, 'Equipos', 'Tabla maestra de equipos.');
+INSERT INTO modulo(id_modulo, nombre_modulo, descripcion_modulo) VALUES (2, 'Perfiles', 'Tabla maestra de perfiles.');
+INSERT INTO modulo(id_modulo, nombre_modulo, descripcion_modulo) VALUES (3, 'Permisos', 'Tabla maestra de permisos.');
+INSERT INTO modulo(id_modulo, nombre_modulo, descripcion_modulo) VALUES (4, 'Alumnos', 'Tabla maestra de alumnos.');
+INSERT INTO modulo(id_modulo, nombre_modulo, descripcion_modulo) VALUES (5, 'Carreras', 'Tabla maestra de carreras.');
+INSERT INTO modulo(id_modulo, nombre_modulo, descripcion_modulo) VALUES (6, 'Equipos', 'Tabla maestra de equipos.');
 
 INSERT INTO carrera_alumno(id_carrera_alumno, nombre_carrera_alumno, descripcion_carrera_alumno, activo_carrera_alumno) VALUES (1, 'Medicina', 'Carrera enfocada en la salud y recuperación de los demás.', 1);
 
@@ -257,3 +256,6 @@ INSERT INTO alumno(id_alumno, id_carrera_alumno, id_estado_alumno, carne_alumno,
 INSERT INTO perfil(id_perfil, nombre_perfil, descripcion_perfil, activo_perfil) VALUES (1, 'Administrador', 'Perfil que permite al usuario tener permisos de administrador.', 1);
 INSERT INTO perfil(id_perfil, nombre_perfil, descripcion_perfil, activo_perfil) VALUES (3, 'Auditor', 'Perfil encargado de gestionar los usuarios del sistema.', 0);
 INSERT INTO perfil(id_perfil, nombre_perfil, descripcion_perfil, activo_perfil) VALUES (4, 'Pruebas', 'Perfil encargado de realizar pruebas de todo tipo.', 0);
+
+INSERT INTO `usuario` (`id_usuario`, `id_perfil`, `carne_usuario`, `nombre_usuario`, `apellido_usuario`, `correo_usuario`, `contrasena_usuario`, `activo_usuario`, `fecha_creacion_usuario`) VALUES
+(2, 1, '9959-23-3070', 'Oscar', 'Morales', 'oscar@miumg.edu.gt ', '$2y$10$Jjfpkw.CCO7vPuZEkDD7HuPNRxF3fC1d7aopOlux3muq.oUhPLSCO', 1, '2026-10-07 08:44:37');
