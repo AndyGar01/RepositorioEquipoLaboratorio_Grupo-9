@@ -155,17 +155,10 @@ CREATE TABLE detalle_devolucion (
     CONSTRAINT fk_detdev_condicion FOREIGN KEY (id_estado_condicion) REFERENCES estado_condicion_devolucion(id_estado_condicion)
 );
 
-CREATE TABLE permiso (
-    id_permiso INT NOT NULL AUTO_INCREMENT,
-    nombre_permiso VARCHAR(100) NOT NULL,
-    descripcion_permiso VARCHAR(255),
-    CONSTRAINT pk_permiso PRIMARY KEY (id_permiso)
-);
-
 CREATE TABLE modulo (
     id_modulo INT NOT NULL AUTO_INCREMENT,
-    nombre_modulo VARCHAR(100) NOT NULL,
-    descripcion_modulo VARCHAR(255),
+    nombre_modulo VARCHAR(50) NOT NULL,
+    descripcion_modulo VARCHAR(255) NOT NULL,
     CONSTRAINT pk_modulo PRIMARY KEY (id_modulo)
 );
 
@@ -177,16 +170,8 @@ CREATE TABLE perfil_modulo (
     permiso_eliminar TINYINT NOT NULL DEFAULT 0,
     permiso_consultar TINYINT NOT NULL DEFAULT 0,
     CONSTRAINT pk_perfil_modulo PRIMARY KEY (id_perfil, id_modulo),
-    CONSTRAINT fk_perfilmodulo_perfil FOREIGN KEY (id_perfil) REFERENCES perfil(id_perfil),
-    CONSTRAINT fk_perfilmodulo_modulo FOREIGN KEY (id_modulo) REFERENCES modulo(id_modulo)
-);
-
-CREATE TABLE perfil_permiso ( 
-    id_perfil INT NOT NULL,
-    id_permiso INT NOT NULL,
-    CONSTRAINT pk_perfil_permiso PRIMARY KEY  (id_perfil, id_permiso),
-    CONSTRAINT fk_perfilpermiso_perfil FOREIGN KEY (id_perfil) REFERENCES perfil(id_perfil),
-    CONSTRAINT fk_perfilpermiso_permiso FOREIGN KEY (id_permiso) REFERENCES permiso(id_permiso)
+    CONSTRAINT fk_perfil_modulo_pef FOREIGN KEY (id_perfil) REFERENCES perfil(id_perfil),
+    CONSTRAINT fk_perfil_modulo_mod FOREIGN KEY (id_modulo) REFERENCES modulo(id_modulo)
 );
 
 CREATE TABLE sesion (
@@ -252,3 +237,23 @@ CREATE TABLE bitacora (
     CONSTRAINT pk_bitacora PRIMARY KEY (id_bitacora),
     CONSTRAINT fk_bitacora_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
 );
+
+INSERT INTO modulo(id_modulo, nombre_modulo, descripcion_modulo) VALUES (1, 'Usuarios', 'Tabla maestra de usuarios.');
+INSERT INTO modulo(id_modulo, nombre_modulo, descripcion_modulo) VALUES (2, 'Módulos', 'Tabla maestra de módulos.');
+INSERT INTO modulo(id_modulo, nombre_modulo, descripcion_modulo) VALUES (3, 'Perfiles', 'Tabla maestra de perfiles.');
+INSERT INTO modulo(id_modulo, nombre_modulo, descripcion_modulo) VALUES (4, 'Permisos', 'Tabla maestra de permisos.');
+INSERT INTO modulo(id_modulo, nombre_modulo, descripcion_modulo) VALUES (5, 'Alumnos', 'Tabla maestra de alumnos.');
+INSERT INTO modulo(id_modulo, nombre_modulo, descripcion_modulo) VALUES (6, 'Carreras', 'Tabla maestra de carreras.');
+INSERT INTO modulo(id_modulo, nombre_modulo, descripcion_modulo) VALUES (7, 'Equipos', 'Tabla maestra de equipos.');
+
+INSERT INTO carrera_alumno(id_carrera_alumno, nombre_carrera_alumno, descripcion_carrera_alumno, activo_carrera_alumno) VALUES (1, 'Medicina', 'Carrera enfocada en la salud y recuperación de los demás.', 1);
+
+INSERT INTO estado_alumno(id_estado_alumno, nombre_estado_alumno) VALUES (1, 'Activo');
+
+INSERT INTO alumno(id_alumno, id_carrera_alumno, id_estado_alumno, carne_alumno, nombre_alumno, apellido_alumno, correo_alumno, fecha_nacimiento_alumno, activo_alumno, fecha_registro_alumno) VALUES (4, 1, 1, '9959233071', 'Oscarito', 'Morales', 'oscar@miumg.edu.ght', '2026-10-20', 1, '2026-10-20 10:07:48');
+INSERT INTO alumno(id_alumno, id_carrera_alumno, id_estado_alumno, carne_alumno, nombre_alumno, apellido_alumno, correo_alumno, fecha_nacimiento_alumno, activo_alumno, fecha_registro_alumno) VALUES (5, 1, 1, '9959233117', 'Andre', 'Gonzales', 'andre@gmail.com', '2026-10-22', 1, '2026-10-22 22:30:04');
+INSERT INTO alumno(id_alumno, id_carrera_alumno, id_estado_alumno, carne_alumno, nombre_alumno, apellido_alumno, correo_alumno, fecha_nacimiento_alumno, activo_alumno, fecha_registro_alumno) VALUES (8, 1, 1, '9959233070', 'Prueba', 'Pruebita', 'prueba@gmail.com', '2026-10-23', 1, '2026-10-23 16:38:51');
+
+INSERT INTO perfil(id_perfil, nombre_perfil, descripcion_perfil, activo_perfil) VALUES (1, 'Administrador', 'Perfil que permite al usuario tener permisos de administrador.', 1);
+INSERT INTO perfil(id_perfil, nombre_perfil, descripcion_perfil, activo_perfil) VALUES (3, 'Auditor', 'Perfil encargado de gestionar los usuarios del sistema.', 0);
+INSERT INTO perfil(id_perfil, nombre_perfil, descripcion_perfil, activo_perfil) VALUES (4, 'Pruebas', 'Perfil encargado de realizar pruebas de todo tipo.', 0);
