@@ -310,3 +310,18 @@ async function MantenimientoCarreras(){
 }
 
 MantenimientoCarreras();
+
+/*------------------------------------------------------------------CRUD DE EQUIPOS------------------------------------------------------------------*/
+
+async function MantenimientoEquipos(){
+    const respuesta = await fetch("API/Vista/Equipos/indexEquipos.php");
+    $(".contenedor_equipos").innerHTML = await respuesta.text();
+
+    VerificarModulo($(".contenedor_equipos"));    
+
+    const script = document.createElement("script");
+    script.src = "API/Vista/Equipos/scriptEquipos.js";
+    document.body.appendChild(script);
+}
+
+MantenimientoEquipos();
