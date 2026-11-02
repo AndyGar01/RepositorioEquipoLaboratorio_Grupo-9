@@ -284,3 +284,9 @@ INSERT INTO estado_condicion_devolucion (nombre_estado_condicion_devolucion) VAL
 INSERT INTO estado_equipo (nombre_estado_equipo) VALUES ('existente'), ('rentado'),  ('agotado'), ('dañado'), ('En mantenimiento');
 
 INSERT INTO estado_prestamo (nombre_estado_prestamo) VALUES ('en proceso'), ('completo'),  ('incompleto'), ('no pago');
+
+INSERT INTO equipo (id_categoria, id_estado_equipo, codigo_equipo, nombre_equipo, descripcion_equipo, numero_serie, fecha_adquisicion, activo) VALUES (1, 1, 'EQ-001', 'Microscopio', 'Microscopio binocular para prácticas', 'MS-1001', '2025-01-15', 1);
+INSERT INTO equipo (id_categoria, id_estado_equipo, codigo_equipo, nombre_equipo, descripcion_equipo, numero_serie, fecha_adquisicion, activo) VALUES (1, 1, 'EQ-002', 'Balanza', 'Balanza analítica de precisión', 'BL-2001', '2025-02-10', 1);
+INSERT INTO equipo (id_categoria, id_estado_equipo, codigo_equipo, nombre_equipo, descripcion_equipo, numero_serie, fecha_adquisicion, activo) VALUES (2, 1, 'EQ-003', 'Balanza digital', 'Balanza digital de laboratorio', 'BD-3001', '2025-03-05', 1);
+INSERT INTO equipo (id_categoria, id_estado_equipo, codigo_equipo, nombre_equipo, descripcion_equipo, numero_serie, fecha_adquisicion, activo) VALUES (3, 1, 'EQ-004', 'Centrífuga', 'Centrífuga de mesa para muestras', 'CF-4001', '2025-04-20', 1);
+INSERT INTO equipo (id_categoria, id_estado_equipo, codigo_equipo, nombre_equipo, descripcion_equipo, numero_serie, fecha_adquisicion, activo) VALUES (5, 1, 'EQ-005', 'Incubadora', 'Incubadora de temperatura controlada', 'IN-5001', '2025-05-12', 1);

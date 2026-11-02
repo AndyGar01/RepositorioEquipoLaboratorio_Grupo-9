@@ -19,7 +19,7 @@ if (!isset($_SESSION['id_usuario'], $_SESSION['id_perfil'])) {
 }
 
 $id_perfil = $_SESSION['id_perfil'];
-$id_modulo = 5;
+$id_modulo = 4;
 
 parse_str(file_get_contents("php://input"), $_PUT);
 parse_str(file_get_contents("php://input"), $_DELETE);
