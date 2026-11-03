@@ -31,11 +31,14 @@ try {
         case 'PUT':
             $modelo->UPDATE_CATEGORIA($datos);
             break;
+        case 'DELETE':
+            $modelo->DELETE_CATEGORIA($datos['id'] ?? 0);
+            break;
         default:
             $response->error("Método no permitido.", 2007, 405);
     }
 } catch (PDOException $e) {
-    $response->error("No se pudo guardar la categoría. Verifica que el nombre no esté repetido.", 3101, 400);
+    $response->error("No se pudo guardar o eliminar la categoría. Verifica que el nombre no esté repetido ni tenga equipos asociados.", 3101, 400);
 } catch (Throwable $e) {
     $response->error("No se pudo procesar la categoría.", 3102, 400);
 }

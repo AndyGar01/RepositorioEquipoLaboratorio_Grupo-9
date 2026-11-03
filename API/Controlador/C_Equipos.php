@@ -51,12 +51,13 @@ switch ($method) {
         $descripcion_equipo = $_POST['descripcion'] ?? null;
         $numero_serie = $_POST['numero_serie'] ?? null;
         $fecha_adquisicion = $_POST['fecha_adquisicion'] ?? null;
-        $imagen_url = $_POST['imagen_url'] ?? null;
-
         try {
             $equipo = new M_Equipos($conection, $response);
             $equipo->INSERT_EQUIPO($_POST);
         } catch (\Throwable $th) {
+            if ($th instanceof InvalidArgumentException) {
+                $response->error($th->getMessage(), 3006, 400);
+            }
             if ($th instanceof PDOException && ($th->errorInfo[1] ?? 0) == 1062) {
                 $response->error("El código o el número de serie ya existe", 3005, 409);
             } else {
@@ -70,6 +71,9 @@ switch ($method) {
             $equipo = new M_Equipos($conection, $response);
             $equipo->UPDATE_EQUIPO($_PUT);
         } catch (\Throwable $th) {
+            if ($th instanceof InvalidArgumentException) {
+                $response->error($th->getMessage(), 3006, 400);
+            }
             if ($th instanceof PDOException && ($th->errorInfo[1] ?? 0) == 1062) {
                 $response->error("El código o el número de serie ya existe", 3005, 409);
             } else {

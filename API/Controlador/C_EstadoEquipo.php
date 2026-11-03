@@ -31,11 +31,14 @@ try {
         case 'PUT':
             $modelo->UPDATE_ESTADO($datos);
             break;
+        case 'DELETE':
+            $modelo->DELETE_ESTADO($datos['id'] ?? 0);
+            break;
         default:
             $response->error("Método no permitido.", 2007, 405);
     }
 } catch (PDOException $e) {
-    $response->error("No se pudo guardar el estado. Verifica que el nombre no esté repetido.", 3201, 400);
+    $response->error("No se pudo guardar o eliminar el estado. Verifica que el nombre no esté repetido ni tenga equipos asociados.", 3201, 400);
 } catch (Throwable $e) {
     $response->error("No se pudo procesar el estado.", 3202, 400);
 }
