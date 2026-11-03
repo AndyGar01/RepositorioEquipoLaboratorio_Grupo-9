@@ -600,3 +600,512 @@ section .wave.wave4 { z-index: -4; }
         font-size: 11px;
     }
 }
+
+.inventario {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 18px 18px 120px;
+    color: #043D59;
+}
+
+.inventario_encabezado {
+    position: relative;
+    display: block;
+    min-height: 142px;
+    padding: 10px 0 12px;
+    margin: 0 auto 20px;
+}
+
+.inventario_encabezado > div:first-child {
+    text-align: center;
+}
+
+.inventario_encabezado .titulo {
+    margin-bottom: 4px;
+    color: #043D59;
+    line-height: 1.15;
+}
+
+.inventario_encabezado p {
+    font-size: 16px;
+}
+
+.inventario_ayuda {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.inventario_ayuda img {
+    display: block;
+    width: 112px;
+    height: 142px;
+    object-fit: contain;
+}
+
+.inventario_acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 12px 0;
+}
+
+.inventario button {
+    min-height: 42px;
+    padding: 9px 16px;
+    border: 1px solid #043D59;
+    border-radius: 5px;
+    background: #FFFFFF;
+    color: #043D59;
+    font: inherit;
+    cursor: pointer;
+}
+
+.inventario button.AgregarModificar,
+.inventario button:hover:not(:disabled) {
+    border-color: #068988;
+    background: #068988;
+    color: #FFFFFF;
+}
+
+.inventario button:disabled {
+    cursor: not-allowed;
+    opacity: .55;
+}
+
+.inventario button:focus-visible,
+.inventario input:focus-visible,
+.inventario select:focus-visible {
+    outline: 3px solid #0A9895;
+    outline-offset: 2px;
+}
+
+.inventario_resumen {
+    margin: 8px 0 14px;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.inventario_ayuda_seleccion {
+    margin: -6px 0 8px;
+    color: #4D626B;
+    font-size: 13px;
+}
+
+.solo_lectores {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    clip-path: inset(50%);
+}
+
+.inventario_filtros {
+    display: grid;
+    grid-template-columns: minmax(280px, 1.7fr) repeat(2, minmax(180px, 1fr));
+    gap: 12px;
+    margin: 0 0 16px;
+}
+
+.inventario_filtro {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.inventario_filtro label,
+.inventario .campos label,
+.inventario_catalogos form label {
+    color: #043D59;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.inventario_filtro input,
+.inventario_filtro select,
+.inventario .campos input,
+.inventario .campos select,
+.inventario_catalogos form input {
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+    min-height: 42px;
+    padding: 9px 11px;
+    border: 1px solid #A8B4B8;
+    border-radius: 5px;
+    background: #FFFFFF;
+    color: #043D59;
+    font: inherit;
+}
+
+.inventario_tabla_scroll {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid #D9D9D9;
+    border-radius: 5px;
+}
+
+.inventario .inventario_tabla {
+    display: table;
+    width: 100%;
+    min-width: 780px;
+    margin: 0;
+    background: #FFFFFF;
+}
+
+.inventario .inventario_tabla th,
+.inventario .inventario_tabla td {
+    padding: 11px 12px;
+    border-bottom: 1px solid #E1E7E9;
+    text-align: left;
+    font-size: 14px;
+}
+
+.inventario .inventario_tabla th {
+    border: 0;
+    background: #068988;
+    color: #FFFFFF;
+}
+
+.inventario .inventario_tabla th:nth-child(5),
+.inventario .inventario_tabla td:nth-child(5) {
+    text-align: center;
+}
+
+.inventario .inventario_tabla tbody tr:hover,
+.inventario .inventario_tabla tbody tr.equipo_seleccionado {
+    background: #E8F7F6;
+}
+
+.inventario .inventario_tabla tbody tr[data-equipo] {
+    cursor: pointer;
+}
+
+.inventario .inventario_tabla tbody tr[data-equipo]:focus-visible {
+    outline: 3px solid #068988;
+    outline-offset: -3px;
+}
+
+.inventario .inventario_tabla tbody tr.equipo_seleccionado td:first-child {
+    box-shadow: inset 4px 0 #068988;
+}
+
+.inventario_mensaje_estado {
+    min-height: 24px;
+    margin-top: 14px;
+    font-size: 14px;
+}
+
+.inventario_modal {
+    position: fixed;
+    z-index: 10010;
+    inset: 0 0 0 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgb(4 31 45 / 55%);
+}
+
+body:has(.barra_lateral.mini_barra_lateral) .inventario_modal {
+    left: 80px;
+}
+
+.inventario_modal.oculto {
+    display: none;
+}
+
+.inventario_modal_contenido {
+    position: relative;
+    width: min(760px, 100%);
+    max-height: min(88vh, 850px);
+    overflow-y: auto;
+    padding: 28px;
+    border-top: 5px solid #068988;
+    border-radius: 8px;
+    background: #FFFFFF;
+    box-shadow: 0 16px 45px rgb(0 0 0 / 20%);
+}
+
+.inventario_modal_contenido h2 {
+    margin: 0 38px 20px 0;
+    color: #043D59;
+    font-size: 25px;
+}
+
+.inventario_cerrar {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    width: 40px;
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    color: #043D59 !important;
+    font-size: 30px !important;
+}
+
+.inventario #formEquipo {
+    display: block;
+    width: 100%;
+}
+
+.inventario .campos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    justify-content: initial;
+    gap: 14px;
+}
+
+.inventario .campos label,
+.inventario_catalogos form label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.inventario .botones {
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.inventario_catalogos {
+    width: min(900px, 100%);
+}
+
+.inventario_catalogo_columnas {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+}
+
+.inventario_catalogo_columnas section {
+    min-width: 0;
+}
+
+.inventario_catalogo_columnas h3 {
+    margin-bottom: 12px;
+    color: #043D59;
+}
+
+.inventario_catalogos form {
+    display: grid;
+    gap: 10px;
+}
+
+.inventario_catalogos ul {
+    margin-top: 14px;
+    list-style: none;
+}
+
+.inventario_catalogos li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 9px 0;
+    border-bottom: 1px solid #E1E7E9;
+}
+
+.inventario_catalogos li button {
+    min-height: 34px;
+    padding: 5px 10px;
+}
+
+.inventario_gestion {
+    width: min(460px, 100%);
+}
+
+.inventario_gestion p {
+    margin-bottom: 20px;
+}
+
+.inventario_gestion_acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+main > section:has(> .wave) {
+    position: fixed;
+    z-index: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 100px;
+    pointer-events: none;
+}
+
+@media (max-width: 1000px) {
+    .inventario_ayuda img {
+        width: 92px;
+        height: 116px;
+    }
+
+    .inventario_filtros {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 650px) {
+    .inventario {
+        padding: 12px 4px 120px;
+    }
+
+    .inventario_encabezado {
+        min-height: auto;
+        padding: 0 0 8px;
+    }
+
+    .inventario_encabezado .titulo {
+        font-size: clamp(28px, 8vw, 38px);
+    }
+
+    .inventario_ayuda {
+        position: static;
+        display: flex;
+        justify-content: center;
+        margin-top: 8px;
+    }
+
+    .inventario_ayuda img {
+        width: 76px;
+        height: 92px;
+    }
+
+    .inventario_filtros,
+    .inventario .campos,
+    .inventario_catalogo_columnas {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .inventario_acciones > button {
+        flex: 1 1 100%;
+    }
+
+    .inventario_modal {
+        inset: 0;
+        align-items: flex-start;
+        padding: 12px;
+    }
+
+    .inventario_modal_contenido {
+        margin: auto 0;
+        padding: 22px 18px;
+    }
+
+    .inventario_modal_contenido h2 {
+        font-size: 21px;
+    }
+
+    .inventario .botones > button,
+    .inventario_gestion_acciones > button {
+        flex: 1 1 100%;
+    }
+}
+
+.inventario_modal_contenido.inventario_catalogos {
+    width: min(900px, 100%);
+    max-height: 84vh;
+    padding: 26px;
+}
+
+.inventario_catalogo_columna {
+    min-width: 0;
+    padding: 16px;
+    border: 1px solid #D9D9D9;
+    border-radius: 5px;
+    background: #FFFFFF;
+}
+
+.inventario_catalogo_columna form > input[type="hidden"] {
+    display: none;
+}
+
+.inventario_catalogos form {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+}
+
+.inventario_catalogos .inventario_catalogo_acciones {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.inventario_catalogos .inventario_catalogo_acciones button {
+    min-height: 38px;
+    padding: 7px 12px;
+}
+
+.inventario_catalogos button.Eliminar {
+    border-color: #8A3030;
+    color: #8A3030;
+}
+
+.inventario_catalogos button.Eliminar:hover:not(:disabled) {
+    border-color: #8A3030;
+    background: #8A3030;
+    color: #FFFFFF;
+}
+
+.inventario_catalogo_instruccion {
+    margin: 14px 0 6px;
+    color: #4D626B;
+    font-size: 13px;
+}
+
+.inventario_catalogos .inventario_catalogo_lista {
+    max-height: 185px;
+    overflow-y: auto;
+    margin: 0;
+    border-top: 1px solid #D9D9D9;
+    list-style: none;
+}
+
+.inventario_catalogos .inventario_catalogo_lista li {
+    display: block;
+    padding: 10px 9px;
+    border-bottom: 1px solid #D9D9D9;
+    color: #043D59;
+    cursor: pointer;
+}
+
+.inventario_catalogos .inventario_catalogo_lista li[data-categoria]:hover,
+.inventario_catalogos .inventario_catalogo_lista li[data-estado]:hover,
+.inventario_catalogos .inventario_catalogo_lista li[aria-pressed="true"] {
+    background: #E8F7F6;
+}
+
+.inventario_catalogos .inventario_catalogo_lista li:focus-visible {
+    outline: 2px solid #068988;
+    outline-offset: -2px;
+}
+
+.inventario_catalogos .inventario_catalogo_lista .inventario_catalogo_vacio {
+    color: #4D626B;
+    cursor: default;
+}
+
+@media (max-width: 650px) {
+    .inventario_modal_contenido.inventario_catalogos {
+        padding: 22px 16px;
+    }
+
+    .inventario_catalogo_columna {
+        padding: 13px;
+    }
+
+    .inventario_catalogos .inventario_catalogo_acciones button {
+        flex: 1 1 auto;
+    }
+}

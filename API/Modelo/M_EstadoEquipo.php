@@ -30,4 +30,11 @@ class M_EstadoEquipo
         $consulta->execute(['id' => $datos['id'] ?? 0, 'nombre' => trim($datos['nombre'] ?? '')]);
         $this->response->success("Estado actualizado correctamente", [], 1);
     }
+
+    function DELETE_ESTADO($id)
+    {
+        $consulta = $this->connection->prepare("DELETE FROM estado_equipo WHERE id_estado_equipo = :id");
+        $consulta->execute(['id' => $id]);
+        $this->response->success("Estado eliminado correctamente", [], 1);
+    }
 }

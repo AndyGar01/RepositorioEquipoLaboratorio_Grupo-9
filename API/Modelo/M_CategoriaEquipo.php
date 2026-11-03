@@ -30,4 +30,11 @@ class M_CategoriaEquipo
         $consulta->execute(['id' => $datos['id'] ?? 0, 'nombre' => trim($datos['nombre'] ?? ''), 'descripcion' => trim($datos['descripcion'] ?? '')]);
         $this->response->success("Categoría actualizada correctamente", [], 1);
     }
+
+    function DELETE_CATEGORIA($id)
+    {
+        $consulta = $this->connection->prepare("DELETE FROM categoria_equipo WHERE id_categoria = :id");
+        $consulta->execute(['id' => $id]);
+        $this->response->success("Categoría eliminada correctamente", [], 1);
+    }
 }
