@@ -20,7 +20,11 @@ switch ($method) {
     case 'GET':
         try {
             $prestamo = new M_Prestamos($conection, $response);
-            $prestamo->SELECT_PRESTAMOS();
+            if (isset($_GET['equipos'])) {
+                $prestamo->SELECT_EQUIPOS_DISPONIBLES();
+            } else {
+                $prestamo->SELECT_PRESTAMOS();
+            }
         } catch (\Throwable $th) {
             $response->error("Error al obtener los préstamos", 4001, 400);
             #$response->debug(null, $th);
