@@ -13,11 +13,20 @@ class M_Prestamos
 
     function SELECT_PRESTAMOS()
     {
-        $query = "SELECT p.id_prestamo AS id, p.id_alumno, CONCAT(a.nombre_alumno, ' ', a.apellido_alumno) AS alumno, p.id_estado_prestamo AS id_estado, ep.nombre_estado_prestamo AS estado, p.fecha_prestamo, p.fecha_devolucion_esperada, GROUP_CONCAT(e.codigo_equipo ORDER BY e.codigo_equipo SEPARATOR ', ') AS equipos FROM prestamo p INNER JOIN alumno a ON a.id_alumno = p.id_alumno INNER JOIN estado_prestamo ep ON ep.id_estado_prestamo = p.id_estado_prestamo LEFT JOIN detalle_prestamo dp ON dp.id_prestamo = p.id_prestamo LEFT JOIN equipo e ON e.id_equipo = dp.id_equipo GROUP BY p.id_prestamo ORDER BY p.id_prestamo DESC";
+        $query = "SELECT p.id_prestamo AS id, p.id_alumno, CONCAT(a.nombre_alumno, ' ', a.apellido_alumno) AS alumno, p.id_estado_prestamo AS id_estado, ep.nombre_estado_prestamo AS estado, p.fecha_prestamo, p.fecha_devolucion_esperada, GROUP_CONCAT(e.codigo_equipo, ' x', dp.cantidad_prestada ORDER BY e.codigo_equipo SEPARATOR ', ') AS equipos FROM prestamo p INNER JOIN alumno a ON a.id_alumno = p.id_alumno INNER JOIN estado_prestamo ep ON ep.id_estado_prestamo = p.id_estado_prestamo LEFT JOIN detalle_prestamo dp ON dp.id_prestamo = p.id_prestamo LEFT JOIN equipo e ON e.id_equipo = dp.id_equipo GROUP BY p.id_prestamo ORDER BY p.id_prestamo DESC";
         $statement = $this->connection->prepare($query);
         $statement->execute();
         $result = $statement->fetchAll(PDO::FETCH_ASSOC);
         $this->response->success("Préstamos obtenidos correctamente", $result, 1);
+    }
+
+    function SELECT_EQUIPOS_DISPONIBLES()
+    {
+        $query = "SELECT e.id_equipo AS id, e.id_categoria, c.nombre_categoria AS categoria, e.codigo_equipo AS codigo, e.nombre_equipo AS nombre, e.cantidad_existencias, e.cantidad_existencias - COALESCE((SELECT SUM(dp.cantidad_prestada) FROM detalle_prestamo dp INNER JOIN prestamo p ON p.id_prestamo = dp.id_prestamo INNER JOIN estado_prestamo ep ON ep.id_estado_prestamo = p.id_estado_prestamo WHERE dp.id_equipo = e.id_equipo AND LOWER(ep.nombre_estado_prestamo) = 'en proceso'), 0) AS cantidad_disponible FROM equipo e INNER JOIN categoria_equipo c ON c.id_categoria = e.id_categoria INNER JOIN estado_equipo s ON s.id_estado_equipo = e.id_estado_equipo WHERE e.activo = 1 AND LOWER(s.nombre_estado_equipo) = 'existente' ORDER BY e.nombre_equipo, e.codigo_equipo";
+        $statement = $this->connection->prepare($query);
+        $statement->execute();
+        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $this->response->success("Equipos obtenidos correctamente", $result, 1);
     }
 
     function INSERT_PRESTAMO($arrayData, $id_usuario)
@@ -29,13 +38,26 @@ class M_Prestamos
         if (!is_array($equipos)) {
             $equipos = explode(',', $equipos);
         }
-        $equipos = array_values(array_unique(array_filter($equipos)));
+        $pedido = [];
+        foreach ($equipos as $linea) {
+            $partes = explode(':', $linea);
+            $id_equipo = (int) $partes[0];
+            $cantidad = (int) ($partes[1] ?? 0);
+            if ($id_equipo > 0) {
+                $pedido[$id_equipo] = ($pedido[$id_equipo] ?? 0) + $cantidad;
+            }
+        }
 
-        if (empty($id_alumno) || empty($fecha_devolucion_esperada) || count($equipos) == 0) {
+        if (empty($id_alumno) || empty($fecha_devolucion_esperada) || count($pedido) == 0) {
             $this->response->error("Alumno, fecha de devolución y equipo son obligatorios", 4010, 400);
         }
-        if (count($equipos) > 10) {
+        if (count($pedido) > 10) {
             $this->response->error("Un préstamo puede tener máximo 10 equipos", 4011, 400);
+        }
+        foreach ($pedido as $cantidad) {
+            if ($cantidad < 1) {
+                $this->response->error("La cantidad de cada equipo debe ser mayor que cero", 4017, 400);
+            }
         }
 
         $hoy = new DateTime('today');
@@ -58,22 +80,18 @@ class M_Prestamos
             $statement = $this->connection->prepare($query);
             $statement->execute();
             $id_estado_proceso = $statement->fetchColumn();
-
-            $query = "SELECT id_estado_equipo FROM estado_equipo WHERE LOWER(nombre_estado_equipo) = 'rentado'";
-            $statement = $this->connection->prepare($query);
-            $statement->execute();
-            $id_estado_rentado = $statement->fetchColumn();
-            if (!$id_estado_proceso || !$id_estado_rentado) {
-                throw new Exception("Faltan los estados 'en proceso' o 'rentado' en la base de datos");
+            if (!$id_estado_proceso) {
+                throw new Exception("Falta el estado 'en proceso' en la base de datos");
             }
 
-            $marcas = implode(',', array_fill(0, count($equipos), '?'));
-            $query = "SELECT e.id_equipo, e.codigo_equipo, e.activo, LOWER(s.nombre_estado_equipo) AS estado FROM equipo e INNER JOIN estado_equipo s ON s.id_estado_equipo = e.id_estado_equipo WHERE e.id_equipo IN ($marcas) FOR UPDATE";
+            $ids = array_keys($pedido);
+            $marcas = implode(',', array_fill(0, count($ids), '?'));
+            $query = "SELECT e.id_equipo, e.codigo_equipo, e.nombre_equipo, e.activo, e.cantidad_existencias, LOWER(s.nombre_estado_equipo) AS estado, COALESCE((SELECT SUM(dp.cantidad_prestada) FROM detalle_prestamo dp INNER JOIN prestamo p ON p.id_prestamo = dp.id_prestamo WHERE dp.id_equipo = e.id_equipo AND p.id_estado_prestamo = ?), 0) AS prestados FROM equipo e INNER JOIN estado_equipo s ON s.id_estado_equipo = e.id_estado_equipo WHERE e.id_equipo IN ($marcas) FOR UPDATE";
             $statement = $this->connection->prepare($query);
-            $statement->execute($equipos);
+            $statement->execute(array_merge([$id_estado_proceso], $ids));
             $lista = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-            if (count($lista) != count($equipos)) {
+            if (count($lista) != count($ids)) {
                 $this->connection->rollBack();
                 $this->response->error("Uno de los equipos seleccionados no existe", 4014, 400);
             }
@@ -82,15 +100,11 @@ class M_Prestamos
                     $this->connection->rollBack();
                     $this->response->error("El equipo " . $equipo['codigo_equipo'] . " no está disponible", 4015, 400);
                 }
-            }
-
-            $query = "SELECT e.codigo_equipo FROM detalle_prestamo dp INNER JOIN prestamo p ON p.id_prestamo = dp.id_prestamo INNER JOIN equipo e ON e.id_equipo = dp.id_equipo WHERE p.id_estado_prestamo = ? AND dp.id_equipo IN ($marcas)";
-            $statement = $this->connection->prepare($query);
-            $statement->execute(array_merge([$id_estado_proceso], $equipos));
-            $ocupado = $statement->fetchColumn();
-            if ($ocupado) {
-                $this->connection->rollBack();
-                $this->response->error("El equipo " . $ocupado . " ya está prestado", 4016, 400);
+                $disponibles = (int) $equipo['cantidad_existencias'] - (int) $equipo['prestados'];
+                if ($pedido[(int) $equipo['id_equipo']] > $disponibles) {
+                    $this->connection->rollBack();
+                    $this->response->error("Solo hay " . $disponibles . " unidad(es) disponibles de " . $equipo['nombre_equipo'], 4016, 400);
+                }
             }
 
             $query = "INSERT INTO prestamo (id_usuario, id_alumno, id_estado_prestamo, fecha_devolucion_esperada) VALUES (:id_usuario, :id_alumno, :id_estado, :fecha_devolucion_esperada)";
@@ -103,14 +117,10 @@ class M_Prestamos
             ]);
             $id_prestamo = $this->connection->lastInsertId();
 
-            foreach ($equipos as $id_equipo) {
-                $query = "INSERT INTO detalle_prestamo (id_prestamo, id_equipo) VALUES (:id_prestamo, :id_equipo)";
+            foreach ($pedido as $id_equipo => $cantidad) {
+                $query = "INSERT INTO detalle_prestamo (id_prestamo, id_equipo, cantidad_prestada) VALUES (:id_prestamo, :id_equipo, :cantidad)";
                 $statement = $this->connection->prepare($query);
-                $statement->execute(['id_prestamo' => $id_prestamo, 'id_equipo' => $id_equipo]);
-
-                $query = "UPDATE equipo SET id_estado_equipo = :id_estado WHERE id_equipo = :id_equipo";
-                $statement = $this->connection->prepare($query);
-                $statement->execute(['id_estado' => $id_estado_rentado, 'id_equipo' => $id_equipo]);
+                $statement->execute(['id_prestamo' => $id_prestamo, 'id_equipo' => $id_equipo, 'cantidad' => $cantidad]);
             }
 
             $this->connection->commit();

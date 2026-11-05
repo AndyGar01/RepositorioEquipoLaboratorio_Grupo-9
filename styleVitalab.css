@@ -420,6 +420,43 @@ section .wave.wave4 {
     background: #c6f4f4;         
 }
 
+/*contenedor con scroll para que la tabla no choque con las olas*/
+.scroll_tabla {
+    width: 90%;
+    max-height: 25vh;
+    min-height: 120px;
+    overflow-y: auto;
+    margin: 20px auto;
+}
+
+.scroll_tabla .contenido {
+    width: 100%;
+    margin: 0;
+}
+
+.scroll_tabla .contenido th {
+    position: sticky;
+    top: 0;
+}
+
+#formPrestamo .inventario_filtros {
+    width: 90%;
+    margin: 0;
+}
+
+#mensajeEquiposPrestamo {
+    min-height: 0;
+    margin: 0;
+}
+
+#mensajeEquiposPrestamo:empty {
+    display: none;
+}
+
+#formPrestamo .scroll_tabla {
+    margin: 0 auto;
+}
+
 #form, #formPermiso, #formPerfilModulo, #formPerfiles, #formModulo, #formCarrera, #formAlumno, #formEquipo, #formPrestamo {    display: flex;
     flex-direction: column;  
     align-items: center;

@@ -2,8 +2,9 @@
 
 const API = "/RepositorioEquipoLaboratorio_Grupo-9/API/Controlador/C_Prestamos.php";
 const API_ALUMNO = "/RepositorioEquipoLaboratorio_Grupo-9/API/Controlador/C_Alumnos.php";
-const API_EQUIPO = "/RepositorioEquipoLaboratorio_Grupo-9/API/Controlador/C_Equipos.php";
 let prestamos = [];
+const equipos = { lista: [], categorias: [] };
+let elegidos = {};
 
 async function accionPrestamo(direccion, metodo, datos = null){
     let opciones = { method : metodo };
@@ -29,18 +30,63 @@ async function LlenarAlumnos(){
     }
 }
 
+function SinTildes(texto){
+    return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+}
+
+function llenarOpciones(selector, lista, texto){
+    const seleccion = $(selector);
+    const valorActual = seleccion.value;
+    seleccion.innerHTML = `<option value="">${texto}</option>` + lista.map(item => `<option value="${item.id}">${item.nombre}</option>`).join("");
+    seleccion.value = valorActual;
+}
+
 async function LlenarEquipos(){
     try {
-        let lista = (await accionPrestamo(API_EQUIPO, "GET")).data;
-        let opciones = "";
-        for (let i = 0; i < lista.length; i++){
-            if (lista[i].activo == 1 && lista[i].disponible == 1){
-                opciones += `<label><input type="checkbox" name="equipo" value="${lista[i].id}" style="width:auto;padding:0"> ${lista[i].codigo} - ${lista[i].nombre}</label>`;
-            }
-        }
-        $("#listaEquipos").innerHTML = opciones || "<span>No hay equipos disponibles.</span>";
+        equipos.lista = (await accionPrestamo(API + "?equipos=1", "GET")).data;
+        let categorias = {};
+        equipos.lista.forEach(item => categorias[item.id_categoria] = item.categoria);
+        equipos.categorias = Object.keys(categorias).map(id => ({ id: id, nombre: categorias[id] }));
+        llenarOpciones("#filtroCategoriaPrestamo", equipos.categorias, "Todas");
+        elegidos = {};
+        dibujarEquipos();
     } catch (error) {
         console.error("Error al cargar equipos:", error);
+    }
+}
+
+function dibujarEquipos(){
+    const consulta = SinTildes($("#buscarEquipoPrestamo").value.trim());
+    const categoria = $("#filtroCategoriaPrestamo").value;
+    const disponible = $("#filtroDisponiblePrestamo").value;
+    const coincidencias = equipos.lista.filter(item =>
+        (!consulta || [item.codigo, item.nombre].some(valor => SinTildes(String(valor ?? "")).includes(consulta))) &&
+        (!categoria || String(item.id_categoria) === categoria) &&
+        (!disponible || String(Number(item.cantidad_disponible) > 0 ? 1 : 0) === disponible)
+    );
+    const lista = equipos.lista.filter(item => coincidencias.includes(item) || elegidos[item.id] !== undefined);
+    $("#tablaEquiposPrestamo").innerHTML = lista.map(item => {
+        const agotado = Number(item.cantidad_disponible) < 1 ? "disabled" : "";
+        const marcado = elegidos[item.id] !== undefined ? "checked" : "";
+        return `<tr data-id="${item.id}">
+        <td><input type="checkbox" name="equipo" value="${item.id}" ${agotado} ${marcado} style="width:auto;padding:0"></td>
+        <td>${item.codigo}</td><td>${item.nombre}</td><td>${item.categoria}</td>
+        <td>${item.cantidad_existencias}</td><td>${item.cantidad_disponible}</td>
+        <td><input type="number" name="cantidad" min="1" max="${item.cantidad_disponible}" value="${elegidos[item.id] ?? 1}" ${agotado} style="width:70px"></td>
+        </tr>`;
+    }).join("");
+    $("#mensajeEquiposPrestamo").textContent = coincidencias.length ? "" : "No hay equipos que coincidan con la búsqueda.";
+}
+
+function ElegirEquipo(evento){
+    const fila = evento.target.closest("tr[data-id]");
+    if (!fila){
+        return;
+    }
+    if (fila.querySelector("input[name='equipo']").checked){
+        elegidos[fila.dataset.id] = fila.querySelector("input[name='cantidad']").value;
+    } else {
+        delete elegidos[fila.dataset.id];
     }
 }
 
@@ -70,15 +116,17 @@ async function Cargar_Prestamos(){
 async function Guardar_Prestamo(evento){
     evento.preventDefault();
     try {
-        let equipos = [...document.querySelectorAll("#listaEquipos input[name='equipo']:checked")].map(e => e.value);
+        let lineas = Object.keys(elegidos).map(id => id + ":" + elegidos[id]);
         let datos = {
             id_alumno: $("#id_alumno_prestamo").value,
             fecha_devolucion_esperada: $("#fecha_devolucion_prestamo").value,
-            equipos: equipos.join(",")
+            equipos: lineas.join(",")
         }
         if (Object.values(datos).some(vacio => vacio == "")){
             alert("Todos los datos son necesarios para el proceso.");
             $("#formPrestamo").reset();
+            elegidos = {};
+            dibujarEquipos();
         } else {
             await accionPrestamo(API, "POST", datos);
             alert(`Se registro el prestamo exitosamente`);
@@ -95,7 +143,11 @@ async function Guardar_Prestamo(evento){
 function Limpiar(){
     $("#id_alumno_prestamo").value = "";
     $("#fecha_devolucion_prestamo").value = "";
-    document.querySelectorAll("#listaEquipos input[name='equipo']").forEach(e => e.checked = false);
+    $("#buscarEquipoPrestamo").value = "";
+    $("#filtroCategoriaPrestamo").value = "";
+    $("#filtroDisponiblePrestamo").value = "";
+    elegidos = {};
+    dibujarEquipos();
 }
 
 function LimitarFecha(){
@@ -108,6 +160,8 @@ function LimitarFecha(){
 
 $("#formPrestamo").addEventListener("submit", Guardar_Prestamo);
 $("#Limpiar_prestamo").addEventListener("click", () => Limpiar());
+["#buscarEquipoPrestamo", "#filtroCategoriaPrestamo", "#filtroDisponiblePrestamo"].forEach(selector => $(selector).addEventListener("input", dibujarEquipos));
+$("#tablaEquiposPrestamo").addEventListener("input", ElegirEquipo);
 
 LimitarFecha();
 LlenarAlumnos();

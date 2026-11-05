@@ -114,6 +114,7 @@ CREATE TABLE detalle_prestamo (
     id_detalle INT NOT NULL AUTO_INCREMENT,
     id_prestamo INT NOT NULL,
     id_equipo INT NOT NULL,
+    cantidad_prestada INT UNSIGNED NOT NULL DEFAULT 1,
     CONSTRAINT pk_detalle_prestamo PRIMARY KEY (id_detalle),
     CONSTRAINT uq_detalle_prestamo_equipo UNIQUE (id_prestamo, id_equipo),
     CONSTRAINT fk_detprestamo_prestamo FOREIGN KEY (id_prestamo) REFERENCES prestamo(id_prestamo),
@@ -290,9 +291,13 @@ INSERT INTO alumno (id_alumno, id_carrera_alumno, id_estado_alumno, carne_alumno
 (5, 1, 1, '9959233117', 'Andre', 'Gonzales', 'andre@gmail.com', '2026-10-22', 1, '2026-10-22 22:30:04'),
 (8, 1, 1, '9959233070', 'Prueba', 'Pruebita', 'prueba@gmail.com', '2026-10-23', 1, '2026-10-23 16:38:51');
 
-INSERT INTO equipo (id_equipo, id_categoria, id_estado_equipo, codigo_equipo, nombre_equipo, descripcion_equipo, numero_serie, fecha_adquisicion, cantidad_existencias, activo) VALUES
-(1, 1, 1, 'EQ-001', 'Microscopio', 'Microscopio binocular para prácticas', 'MS-1001', '2025-01-15', 1, 1),
-(2, 2, 1, 'EQ-002', 'Balanza', 'Balanza analítica de precisión', 'BL-2001', '2025-02-10', 1, 1),
-(3, 2, 1, 'EQ-003', 'Balanza digital', 'Balanza digital de laboratorio', 'BD-3001', '2025-03-05', 1, 1),
-(4, 3, 1, 'EQ-004', 'Centrífuga', 'Centrífuga de mesa para muestras', 'CF-4001', '2025-04-20', 1, 1),
-(5, 5, 1, 'EQ-005', 'Incubadora', 'Incubadora de temperatura controlada', 'IN-5001', '2025-05-12', 1, 1);
+INSERT INTO equipo (id_categoria, id_estado_equipo, codigo_equipo, nombre_equipo, descripcion_equipo, numero_serie, fecha_adquisicion, cantidad_existencias, activo) VALUES
+(1, 1, 'EQ-006', 'Pipeta', 'Pipeta automática de 100 a 1000 microlitros', 'PP-6001', '2025-06-10', 12, 1),
+(2, 1, 'EQ-007', 'Probeta', 'Probeta graduada de vidrio de 100 ml', 'PB-7001', '2025-06-18', 20, 1),
+(2, 1, 'EQ-008', 'Matraz Erlenmeyer', 'Matraz de 250 ml con tapón', 'MZ-8001', '2025-07-02', 15, 1),
+(3, 1, 'EQ-009', 'Mechero Bunsen', 'Mechero de gas para laboratorio', 'MB-9001', '2025-07-20', 6, 1),
+(3, 1, 'EQ-010', 'Agitador magnético', 'Agitador con placa calefactora', 'AG-1001', '2025-08-05', 4, 1),
+(4, 1, 'EQ-011', 'Termómetro digital', 'Termómetro de sonda, rango de -50 a 300 °C', 'TD-1101', '2025-08-22', 10, 1),
+(4, 1, 'EQ-012', 'Cronómetro', 'Cronómetro digital con memoria de vueltas', 'CR-1201', '2025-09-03', 7, 1),
+(5, 1, 'EQ-013', 'Autoclave', 'Autoclave de sobremesa de 18 litros', 'AC-1301', '2025-09-15', 1, 1),
+(5, 1, 'EQ-014', 'Gradilla', 'Gradilla de metal para 24 tubos de ensayo', 'GR-1401', '2025-10-01', 9, 1);
