@@ -20,7 +20,7 @@
             </div>
 
             <h2 class="login-titulo">Bienvenido</h2>
-            <p class="login-subtitulo">Ingresa tus credenciales para continuar</p>
+            <p class="login-subtitulo">Ingresa con tu cuenta de VitaLab</p>
 
             <form id="formLogin" class="login-form" novalidate>
 
@@ -29,8 +29,10 @@
                     <input
                         type="email"
                         id="correo"
-                        placeholder="Correo electronico"
-                        autocomplete="email"
+                        placeholder="Correo electrónico"
+                        aria-label="Correo electrónico"
+                        autocomplete="username"
+                        required
                     >
                 </div>
 
@@ -40,17 +42,11 @@
                         type="password"
                         id="contrasena"
                         placeholder="Contraseña"
+                        aria-label="Contraseña"
                         autocomplete="current-password"
+                        required
                     >
                     <i class="fa-solid fa-eye ojo-icono" id="toggleContrasena"></i>
-                </div>
-
-                <div class="login-opciones">
-                    <label class="recordarme">
-                        <input type="checkbox" id="recordarme">
-                        <span>Recordarme</span>
-                    </label>
-                    <a href="#" class="olvidar-link">Olvidé mi contraseña</a>
                 </div>
 
                 <div id="mensajeError" class="mensaje-error oculto"></div>

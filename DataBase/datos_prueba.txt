@@ -63,3 +63,25 @@ CROSS JOIN estado_equipo s
 WHERE c.nombre_categoria = 'Muestras'
   AND s.nombre_estado_equipo = 'Existente'
   AND NOT EXISTS (SELECT 1 FROM equipo WHERE codigo_equipo = 'EQ-PRU-003');
+INSERT INTO usuario (id_perfil, carne_usuario, nombre_usuario, apellido_usuario, correo_usuario, contrasena_usuario, cambio_contrasena_requerido, activo_usuario)
+SELECT p.id_perfil, 'ADMIN-PRUEBA', 'Administrador', 'VitaLab', 'admin.prueba@vitalab.test', '$2y$10$LNig7xajH26YwM6KRQ633.MLP2T37aL0LaaXRVl3GUm.eHMGFFoai', 0, 1
+FROM perfil p
+WHERE p.nombre_perfil = 'Administrador'
+  AND NOT EXISTS (SELECT 1 FROM usuario WHERE correo_usuario = 'admin.prueba@vitalab.test');
+
+INSERT INTO alumno (id_carrera_alumno, id_estado_alumno, carne_alumno, nombre_alumno, apellido_alumno, correo_alumno, fecha_nacimiento_alumno, activo_alumno)
+SELECT c.id_carrera_alumno, e.id_estado_alumno, '2026AL001', 'Ana', 'Prueba', 'alumna.prueba@vitalab.test', '2002-06-15', 1
+FROM carrera_alumno c
+CROSS JOIN estado_alumno e
+WHERE c.nombre_carrera_alumno = 'Medicina'
+  AND e.nombre_estado_alumno = 'Activo'
+  AND NOT EXISTS (SELECT 1 FROM alumno WHERE carne_alumno = '2026AL001' OR correo_alumno = 'alumna.prueba@vitalab.test');
+
+INSERT INTO usuario (id_perfil, id_alumno, carne_usuario, nombre_usuario, apellido_usuario, correo_usuario, contrasena_usuario, cambio_contrasena_requerido, activo_usuario)
+SELECT p.id_perfil, a.id_alumno, a.carne_alumno, a.nombre_alumno, a.apellido_alumno, 'alumna.prueba@vitalab.test', '$2y$10$mNCclyXIicgCX0Y0HND5Q.KhjcWQzFwwmasj4y7/OmhYGADHpF5yO', 1, 1
+FROM perfil p
+CROSS JOIN alumno a
+WHERE p.nombre_perfil = 'Alumno'
+  AND a.carne_alumno = '2026AL001'
+  AND a.correo_alumno = 'alumna.prueba@vitalab.test'
+  AND NOT EXISTS (SELECT 1 FROM usuario WHERE correo_usuario = 'alumna.prueba@vitalab.test');

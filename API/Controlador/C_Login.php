@@ -4,51 +4,72 @@ require_once __DIR__ . "/../Modelo/M_Login.php";
 
 $metodo = $_SERVER['REQUEST_METHOD'];
 $modelo = new M_Login();
+$nombreCookie = 'vitalab_token';
+$opcionesCookie = [
+    'expires' => time() + 28800,
+    'path' => '/',
+    'secure' => !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
+    'httponly' => true,
+    'samesite' => 'Strict'
+];
 
 switch ($metodo) {
     case 'POST':
-        $correo     = trim($_POST['correo']     ?? '');
-        $contrasena = trim($_POST['contrasena'] ?? '');
-        if (empty($correo) || empty($contrasena)) {
-            Response::error('Correo y contraseña son requeridos.', 'POST', 400);
+        $correo = trim($_POST['correo'] ?? '');
+        $contrasena = $_POST['contrasena'] ?? '';
+        if ($correo === '' || $contrasena === '') {
+            Response::error('Correo y contraseña son requeridos.', 2001, 400);
         }
+
         $resultado = $modelo->LOGIN($correo, $contrasena);
         if (!$resultado['exito']) {
-            Response::error($resultado['mensaje'], 'POST', 401);
+            Response::error($resultado['mensaje'], 2002, 401);
         }
-        Response::success(
-            'Sesion iniciada correctamente.',
-            ['usuario' => $resultado['usuario'], 'token' => $resultado['token']],
-            200
-        );
+
+        setcookie($nombreCookie, $resultado['token'], $opcionesCookie);
+        Response::success('Sesión iniciada correctamente.', $resultado['usuario'], 1);
         break;
 
     case 'GET':
-        $token = trim($_GET['token'] ?? '');
-        if (empty($token)) {
-            Response::error('Token no proporcionado.', 'GET', 400);
+        $token = $_COOKIE[$nombreCookie] ?? '';
+        if ($token === '') {
+            Response::error('Debes iniciar sesión.', 2003, 401);
         }
         $resultado = $modelo->VERIFICAR_SESION($token);
         if (!$resultado['valido']) {
-            Response::error('Sesion invalida o expirada.', 'GET', 401);
+            setcookie($nombreCookie, '', ['expires' => time() - 3600, 'path' => '/', 'samesite' => 'Strict', 'httponly' => true, 'secure' => $opcionesCookie['secure']]);
+            Response::error('La sesión no es válida o ya venció.', 2004, 401);
         }
-        Response::success('Sesion valida.', $resultado['usuario'], 200);
+        Response::success('Sesión válida.', $resultado['usuario'], 1);
+        break;
+
+    case 'PUT':
+        $token = $_COOKIE[$nombreCookie] ?? '';
+        $sesion = $modelo->VERIFICAR_SESION($token);
+        if (!$sesion['valido']) {
+            Response::error('Debes iniciar sesión.', 2003, 401);
+        }
+        parse_str(file_get_contents('php://input'), $datos);
+        $actual = $datos['contrasena_actual'] ?? '';
+        $nueva = $datos['contrasena_nueva'] ?? '';
+        if (strlen($nueva) < 8) {
+            Response::error('La nueva contraseña debe tener al menos 8 caracteres.', 2005, 400);
+        }
+        if (!$modelo->CAMBIAR_CONTRASENA($sesion['usuario']['id'], $actual, $nueva)) {
+            Response::error('La contraseña actual no es correcta.', 2006, 400);
+        }
+        Response::success('Contraseña actualizada correctamente.', [], 1);
         break;
 
     case 'DELETE':
-        parse_str(file_get_contents('php://input'), $body);
-        $token = trim($body['token'] ?? '');
-        if (empty($token)) {
-            Response::error('Token no proporcionado.', 'DELETE', 400);
+        $token = $_COOKIE[$nombreCookie] ?? '';
+        if ($token !== '') {
+            $modelo->LOGOUT($token);
         }
-        $resultado = $modelo->LOGOUT($token);
-        if (!$resultado['exito']) {
-            Response::error('No se pudo cerrar la sesion.', 'DELETE', 500);
-        }
-        Response::success('Sesion cerrada correctamente.', null, 200);
+        setcookie($nombreCookie, '', ['expires' => time() - 3600, 'path' => '/', 'samesite' => 'Strict', 'httponly' => true, 'secure' => $opcionesCookie['secure']]);
+        Response::success('Sesión cerrada correctamente.', [], 1);
         break;
 
     default:
-        Response::error('Metodo no permitido.', $metodo, 405);
-        break;
+        Response::error('Método no permitido.', 2007, 405);
 }

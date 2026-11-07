@@ -12,8 +12,15 @@ async function accionAlumno(direccion, metodo, datos = null){
     }
     let solicitud = await fetch(direccion, opciones);
     let respuesta = await solicitud.json();
-    console.log(metodo, solicitud.status, respuesta);
+    if (!solicitud.ok) throw new Error(respuesta.message || "No se pudo completar la solicitud.");
     return respuesta;
+}
+
+function mostrarClaveTemporal(respuesta){
+    if (!respuesta.data || !respuesta.data.contrasena_temporal) return;
+    const destino = $("#mensajeAccesoAlumno");
+    destino.textContent = "Acceso para " + respuesta.data.correo + ". Clave temporal: " + respuesta.data.contrasena_temporal + ". Entrégala al alumno; deberá cambiarla al ingresar.";
+    alert(destino.textContent);
 }
 
 //Esta función permite llenar el combo box con el estado del alumno
@@ -69,15 +76,18 @@ async function Guardar_Alumno(evento){
             $("#formAlumno").reset();
             $("#id_alumno").value = "";
         } else {
+            let respuesta;
             if ($("#id_alumno").value){
-                await accionAlumno(API, "PUT", { id: $("#id_alumno").value, ...datos});
+                respuesta = await accionAlumno(API, "PUT", { id: $("#id_alumno").value, ...datos});
                 alert(`Se actualizo el alumno ${$("#nombre_alumno").value} exitosamente`);
             } else {
-                await accionAlumno(API, "POST", datos);
-                alert(`Se inserto el alumno ${$("#nombre_alumno").value} exitosamente`);
+                respuesta = await accionAlumno(API, "POST", datos);
+                alert(respuesta.message || `Se inserto el alumno ${$("#nombre_alumno").value} exitosamente`);
             }
+            mostrarClaveTemporal(respuesta);
             $("#formAlumno").reset();
             $("#id_alumno").value = "";
+            $("#Acceso_alumno").disabled = true;
             Cargar_Alumnos();
         }
     } catch (error) {
@@ -99,6 +109,7 @@ async function Eliminar(idAlumno){
 function Rellenar(idAlumno){
     let alu = alumnos.find(e => Object.values(e)[0] == idAlumno);
     let v = Object.values(alu);
+    $("#mensajeAccesoAlumno").textContent = "";
     $("#id_alumno").value = v[0];
     $("#id_carrera_alumno").value = v[1];
     $("#id_estado_alumno").value = v[2];
@@ -107,6 +118,7 @@ function Rellenar(idAlumno){
     $("#apellido_alumno").value = v[5];
     $("#correo_alumno").value = v[6];
     $("#fecha_nacimiento_alumno").value = v[7];
+    $("#Acceso_alumno").disabled = false;
 }
 
 function Limpiar(){
@@ -118,7 +130,21 @@ function Limpiar(){
     $("#apellido_alumno").value = "";
     $("#correo_alumno").value = "";
     $("#fecha_nacimiento_alumno").value = "";
+    $("#Acceso_alumno").disabled = true;
+    $("#mensajeAccesoAlumno").textContent = "";
 }
+
+$("#Acceso_alumno").addEventListener("click", async () => {
+    const id = $("#id_alumno").value;
+    if (!id) return alert("Selecciona un alumno de la lista.");
+    if (!confirm("Se generará una nueva clave temporal para " + $("#nombre_alumno").value + ". ¿Continuar?")) return;
+    try {
+        const respuesta = await accionAlumno(API, "POST", {accion: "generar_acceso", id});
+        mostrarClaveTemporal(respuesta);
+    } catch (error) {
+        alert(error.message);
+    }
+});
 
 $("#Eliminar_alumno").addEventListener("click", function(accion){
     accion.preventDefault();
@@ -134,7 +160,7 @@ $("#Eliminar_alumno").addEventListener("click", function(accion){
         return;
     }
     Eliminar(id);
-    alert("Se elimino el alumno correctamente.");
+        alert("Se dio de baja al alumno correctamente.");
     $("#id_alumno").value = "";
     $("#formAlumno").reset();
 });

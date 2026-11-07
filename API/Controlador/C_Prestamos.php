@@ -2,10 +2,12 @@
 require_once(__DIR__ . "/../Core/Connection.php");
 require_once(__DIR__ . "/../Modelo/M_Prestamos.php");
 require_once(__DIR__ . "/../Core/Response.php");
+require_once(__DIR__ . "/../Core/AdminApi.php");
 
 $conection = new Connection();
 $response = new Response();
 $method = $_SERVER['REQUEST_METHOD'];
+AdminApi::verificar($conection, $response, $method, 7);
 
 if (!isset($_SESSION['id_usuario'], $_SESSION['id_perfil'])) {
     $response->error(

@@ -2,36 +2,15 @@
 require_once(__DIR__ . "/../core/Connection.php");
 require_once(__DIR__ . "/../Modelo/M_Alumnos.php");
 require_once(__DIR__ . "/../core/Response.php");
-require_once(__DIR__ . "/../Core/Permisos.php");
+require_once(__DIR__ . "/../Core/AdminApi.php");
 
 $conection = new Connection();
 $response = new Response();
-$permisos = new Permisos($conection);
 $method = $_SERVER['REQUEST_METHOD'];
-
-if (!isset($_SESSION['id_usuario'], $_SESSION['id_perfil'])) {
-    $response->error(
-        "Debes iniciar sesión para acceder.",
-        2005,
-        401
-    );
-    exit;
-}
-
-$id_perfil = $_SESSION['id_perfil'];
-$id_modulo = 4;
+AdminApi::verificar($conection, $response, $method, 4);
 
 parse_str(file_get_contents("php://input"), $_PUT);
 parse_str(file_get_contents("php://input"), $_DELETE);
-
-if (!$permisos->verificar($id_perfil, $id_modulo, $method)) {
-    $response->error(
-        "No tienes permisos para realizar esta operación.",
-        2006,
-        403
-    );
-    exit;
-}
 
 switch ($method) {
     case 'GET':
@@ -44,19 +23,19 @@ switch ($method) {
         }
         break;
     case 'POST':
-        $id_carrera_alumno = $_POST['id_carrera'] ?? null;
-        $id_estado_alumno = $_POST['id_estado'] ?? null;
-        $carne_alumno = $_POST['carne'] ?? null;
-        $nombre_alumno = $_POST['nombre'] ?? null;
-        $apellido_alumno = $_POST['apellido'] ?? null;
-        $correo_alumno = $_POST['correo'] ?? null;
-        $fecha_nacimiento_alumno = $_POST['fecha_nacimiento'] ?? null;
-
         try {
             $user = new M_Alumnos($conection, $response);
+            if (($_POST['accion'] ?? '') === 'generar_acceso') {
+                $user->GENERAR_ACCESO_ALUMNO($_POST['id'] ?? 0);
+            }
             $user->INSERT_ALUMNO($_POST);
+        } catch (PDOException $th) {
+            if (($th->errorInfo[1] ?? 0) === 1062) {
+                $response->error("El carné o el correo ya está registrado.", 2007, 409);
+            }
+            $response->error("No se pudo guardar el alumno o crear su acceso.", 2002, 400);
         } catch (\Throwable $th) {
-            $response->error("Error al agregar el alumno" . $th->getMessage(), 2002, 400);
+            $response->error($th->getMessage(), 2002, 400);
             #$response->debug(null, $th);
         }
         break;
@@ -64,8 +43,13 @@ switch ($method) {
         try {
             $user = new M_Alumnos($conection, $response);
             $user->UPDATE_ALUMNO($_PUT);
+        } catch (PDOException $th) {
+            if (($th->errorInfo[1] ?? 0) === 1062) {
+                $response->error("El carné o el correo ya está registrado.", 2007, 409);
+            }
+            $response->error("No se pudo actualizar el alumno o su cuenta.", 2003, 400);
         } catch (\Throwable $th) {
-            $response->error("Error al actualizar el alumno", 2003, 400);
+            $response->error($th->getMessage(), 2003, 400);
         }
         break;
     case 'DELETE':

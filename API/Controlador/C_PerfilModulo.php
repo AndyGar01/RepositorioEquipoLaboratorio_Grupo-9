@@ -3,10 +3,12 @@
 require_once(__DIR__ . "/../Core/Connection.php");
 require_once(__DIR__ . "/../Core/Response.php");
 require_once(__DIR__ . "/../Modelo/M_PerfilModulo.php");
+require_once(__DIR__ . "/../Core/AdminApi.php");
 
 $connection = new Connection();
 $response = new Response();
 $method = $_SERVER['REQUEST_METHOD'];
+AdminApi::verificar($connection, $response, $method, 3);
 
 parse_str(file_get_contents("php://input"), $_PUT);
 parse_str(file_get_contents("php://input"), $_DELETE);
