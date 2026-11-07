@@ -420,6 +420,16 @@ section .wave.wave4 {
     background: #c6f4f4;         
 }
 
+.contenido tbody tr.solicitud-seleccionada {
+    background: #d8f0ee;
+    box-shadow: inset 4px 0 #068988;
+}
+
+.contenido tbody tr[data-solicitud]:focus-visible {
+    outline: 2px solid #043D59;
+    outline-offset: -2px;
+}
+
 /*contenedor con scroll para que la tabla no choque con las olas*/
 .scroll_tabla {
     width: 90%;
@@ -912,6 +922,45 @@ body:has(.barra_lateral.mini_barra_lateral) .inventario_modal {
     margin-top: 20px;
 }
 
+.inventario .inventario_imagen_campo {
+    grid-column: 1 / -1;
+}
+
+.inventario .inventario_imagen_campo input {
+    padding: 8px;
+}
+
+.inventario .inventario_imagen_campo span {
+    color: #4D626B;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.inventario_imagen_previa {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 16px;
+    padding: 12px;
+    border: 1px solid #D9D9D9;
+    border-radius: 5px;
+    background: #F7FAFA;
+}
+
+.inventario_imagen_previa img {
+    width: 96px;
+    height: 82px;
+    flex: 0 0 96px;
+    object-fit: contain;
+    background: #FFFFFF;
+}
+
+.inventario_imagen_previa p {
+    margin: 0;
+    color: #4D626B;
+    font-size: 13px;
+}
+
 .inventario_catalogos {
     width: min(900px, 100%);
 }
@@ -1045,6 +1094,16 @@ main > section:has(> .wave) {
     .inventario_gestion_acciones > button {
         flex: 1 1 100%;
     }
+
+    .inventario_imagen_previa {
+        align-items: flex-start;
+    }
+
+    .inventario_imagen_previa img {
+        width: 72px;
+        height: 72px;
+        flex-basis: 72px;
+    }
 }
 
 .inventario_modal_contenido.inventario_catalogos {
@@ -1144,5 +1203,292 @@ main > section:has(> .wave) {
 
     .inventario_catalogos .inventario_catalogo_acciones button {
         flex: 1 1 auto;
+    }
+}
+
+.modulo_prestamos {
+    position: relative;
+    z-index: 1;
+    width: min(1280px, 100%);
+    margin: 0 auto;
+    padding: 12px 18px 130px;
+    color: #043D59;
+}
+
+.prestamos_encabezado {
+    margin: 0 0 20px;
+    text-align: center;
+}
+
+.prestamos_encabezado .titulo {
+    margin-bottom: 4px;
+}
+
+.prestamos_encabezado p,
+.prestamo_panel_encabezado p,
+.prestamo_subencabezado p {
+    color: #4D626B;
+    font-size: 14px;
+}
+
+.prestamo_panel {
+    margin: 0 0 20px;
+    padding: 22px;
+    border: 1px solid #D9D9D9;
+    border-top: 4px solid #068988;
+    border-radius: 6px;
+    background: #FFFFFF;
+}
+
+.prestamo_panel_encabezado {
+    margin-bottom: 18px;
+}
+
+.prestamo_panel_encabezado h2 {
+    margin: 0 0 4px;
+    color: #043D59;
+    font-size: 22px;
+}
+
+.modulo_prestamos #formPrestamo {
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+    gap: 18px;
+}
+
+.prestamo_datos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.prestamo_campo {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.prestamo_campo label {
+    color: #043D59;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.prestamo_campo select,
+.prestamo_campo input {
+    width: 100%;
+    min-height: 44px;
+    padding: 9px 11px;
+    border: 1px solid #A8B4B8;
+    border-radius: 5px;
+    background: #FFFFFF;
+    color: #043D59;
+    font: inherit;
+}
+
+.prestamo_seccion_equipo {
+    display: grid;
+    gap: 14px;
+}
+
+.prestamo_subencabezado h3 {
+    margin: 0 0 3px;
+    color: #043D59;
+    font-size: 17px;
+}
+
+.modulo_prestamos #formPrestamo .prestamo_filtros {
+    width: 100%;
+    grid-template-columns: minmax(220px, 1.5fr) repeat(2, minmax(160px, 1fr));
+    margin: 0;
+}
+
+.prestamo_tabla_contenedor {
+    width: 100%;
+    max-height: 340px;
+    min-height: 90px;
+    margin: 0;
+    overflow: auto;
+    border: 1px solid #D9D9D9;
+    border-radius: 5px;
+}
+
+.modulo_prestamos .prestamo_tabla {
+    display: table;
+    width: 100%;
+    min-width: 790px;
+    margin: 0;
+    overflow: visible;
+    background: #FFFFFF;
+}
+
+.modulo_prestamos .prestamo_tabla th,
+.modulo_prestamos .prestamo_tabla td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #E1E7E9;
+    text-align: left;
+    vertical-align: middle;
+    font-size: 14px;
+}
+
+.modulo_prestamos .prestamo_tabla th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: #068988;
+    color: #FFFFFF;
+}
+
+.modulo_prestamos .prestamo_tabla td:first-child,
+.modulo_prestamos .prestamo_tabla th:first-child {
+    width: 76px;
+    text-align: center;
+}
+
+.modulo_prestamos .prestamo_tabla input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: #068988;
+}
+
+.modulo_prestamos .prestamo_tabla .prestamo_cantidad {
+    width: 82px;
+    min-height: 36px;
+    padding: 5px 8px;
+    border: 1px solid #A8B4B8;
+    border-radius: 4px;
+    color: #043D59;
+}
+
+.modulo_prestamos .prestamo_tabla tr:focus-visible {
+    outline: 2px solid #043D59;
+}
+
+.prestamo_pie_formulario {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #D9D9D9;
+}
+
+.prestamo_pie_formulario p {
+    margin: 0;
+    color: #043D59;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.prestamo_pie_formulario .botones {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.modulo_prestamos button:disabled {
+    cursor: not-allowed;
+    opacity: .55;
+}
+
+.prestamo_mensaje_formulario {
+    min-height: 20px;
+    margin: -8px 0 0;
+    color: #043D59;
+    font-size: 14px;
+}
+
+.prestamo_tabla_historial {
+    max-height: 300px;
+}
+
+.prestamo_solicitudes_encabezado {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.prestamo_solicitudes_encabezado h2 {
+    margin-bottom: 4px;
+}
+
+.prestamo_acciones_solicitud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+}
+
+.prestamo_acciones_solicitud button {
+    min-height: 42px;
+    padding: 8px 14px;
+}
+
+#tablaSolicitudesPendientes tr[data-solicitud] {
+    cursor: pointer;
+}
+
+#tablaSolicitudesPendientes tr[data-solicitud]:focus-visible {
+    outline: 2px solid #043D59;
+    outline-offset: -2px;
+}
+
+@media (max-width: 760px) {
+    .modulo_prestamos {
+        padding: 12px 12px 120px;
+    }
+
+    .prestamo_panel {
+        padding: 18px 14px;
+    }
+
+    .modulo_prestamos #formPrestamo .prestamo_filtros {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .modulo_prestamos #formPrestamo .prestamo_filtros .inventario_filtro:first-child {
+        grid-column: 1 / -1;
+    }
+
+    .prestamo_solicitudes_encabezado {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 540px) {
+    .modulo_prestamos {
+        padding: 10px 8px 120px;
+    }
+
+    .prestamo_panel {
+        padding: 16px 12px;
+    }
+
+    .prestamo_datos,
+    .modulo_prestamos #formPrestamo .prestamo_filtros {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .modulo_prestamos #formPrestamo .prestamo_filtros .inventario_filtro:first-child {
+        grid-column: auto;
+    }
+
+    .prestamo_pie_formulario {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .prestamo_pie_formulario .botones,
+    .prestamo_acciones_solicitud {
+        width: 100%;
+    }
+
+    .prestamo_pie_formulario .botones button,
+    .prestamo_acciones_solicitud button {
+        flex: 1 1 100%;
     }
 }

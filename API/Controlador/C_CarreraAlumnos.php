@@ -2,10 +2,12 @@
 require_once(__DIR__ . "/../core/Connection.php");
 require_once(__DIR__ . "/../Modelo/M_CarreraAlumnos.php");
 require_once(__DIR__ . "/../core/Response.php");
+require_once(__DIR__ . "/../Core/AdminApi.php");
 
 $conection = new Connection();
 $response = new Response();
 $method = $_SERVER['REQUEST_METHOD'];
+AdminApi::verificar($conection, $response, $method, 5);
 
 parse_str(file_get_contents("php://input"), $_PUT);
 parse_str(file_get_contents("php://input"), $_DELETE);

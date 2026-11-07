@@ -19,7 +19,7 @@ class M_Equipos
 
     function SELECT_EQUIPOS()
     {
-        $query = "SELECT e.id_equipo AS id, e.id_categoria, e.id_estado_equipo AS id_estado, c.nombre_categoria AS categoria, s.nombre_estado_equipo AS estado, e.codigo_equipo AS codigo, e.nombre_equipo AS nombre, e.descripcion_equipo AS descripcion, e.numero_serie, e.fecha_adquisicion, e.cantidad_existencias, e.activo, CASE WHEN e.activo = 1 AND LOWER(s.nombre_estado_equipo) = 'existente' AND NOT EXISTS (SELECT 1 FROM detalle_prestamo dp INNER JOIN prestamo p ON p.id_prestamo = dp.id_prestamo INNER JOIN estado_prestamo ep ON ep.id_estado_prestamo = p.id_estado_prestamo WHERE dp.id_equipo = e.id_equipo AND LOWER(ep.nombre_estado_prestamo) = 'en proceso') THEN 1 ELSE 0 END AS disponible FROM equipo e INNER JOIN categoria_equipo c ON c.id_categoria = e.id_categoria INNER JOIN estado_equipo s ON s.id_estado_equipo = e.id_estado_equipo WHERE e.activo = 1 ORDER BY e.id_equipo DESC";
+        $query = "SELECT e.id_equipo AS id, e.id_categoria, e.id_estado_equipo AS id_estado, c.nombre_categoria AS categoria, s.nombre_estado_equipo AS estado, e.codigo_equipo AS codigo, e.nombre_equipo AS nombre, e.descripcion_equipo AS descripcion, e.numero_serie, e.fecha_adquisicion, e.cantidad_existencias, e.imagen_url, e.activo, CASE WHEN e.activo = 1 AND LOWER(s.nombre_estado_equipo) = 'existente' AND NOT EXISTS (SELECT 1 FROM detalle_prestamo dp INNER JOIN prestamo p ON p.id_prestamo = dp.id_prestamo INNER JOIN estado_prestamo ep ON ep.id_estado_prestamo = p.id_estado_prestamo WHERE dp.id_equipo = e.id_equipo AND LOWER(ep.nombre_estado_prestamo) = 'en proceso') THEN 1 ELSE 0 END AS disponible FROM equipo e INNER JOIN categoria_equipo c ON c.id_categoria = e.id_categoria INNER JOIN estado_equipo s ON s.id_estado_equipo = e.id_estado_equipo WHERE e.activo = 1 ORDER BY e.id_equipo DESC";
         $statement = $this->connection->prepare($query);
         $statement->execute();
         $result = $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -40,7 +40,7 @@ class M_Equipos
             throw new InvalidArgumentException("Las existencias deben ser un número entero mayor que cero.");
         }
 
-        $query = "INSERT INTO equipo (id_categoria, id_estado_equipo, codigo_equipo, nombre_equipo, descripcion_equipo, numero_serie, fecha_adquisicion, cantidad_existencias) VALUES (:id_categoria, :id_estado, :codigo, :nombre, :descripcion, :numero_serie, :fecha_adquisicion, :cantidad_existencias)";
+        $query = "INSERT INTO equipo (id_categoria, id_estado_equipo, codigo_equipo, nombre_equipo, descripcion_equipo, numero_serie, fecha_adquisicion, cantidad_existencias, imagen_url) VALUES (:id_categoria, :id_estado, :codigo, :nombre, :descripcion, :numero_serie, :fecha_adquisicion, :cantidad_existencias, :imagen_url)";
         $statement = $this->connection->prepare($query);
         $statement->execute([
             'id_categoria' => $id_categoria,
@@ -50,9 +50,9 @@ class M_Equipos
             'descripcion' => $descripcion_equipo,
             'numero_serie' => $numero_serie,
             'fecha_adquisicion' => $fecha_adquisicion,
-            'cantidad_existencias' => $cantidad_existencias
+            'cantidad_existencias' => $cantidad_existencias,
+            'imagen_url' => $arrayData['_imagen_url'] ?? null
         ]);
-        $this->response->success("Equipo agregado correctamente", [], 1);
     }
 
     function UPDATE_EQUIPO($arrayData)
@@ -76,9 +76,13 @@ class M_Equipos
             throw new InvalidArgumentException("Las existencias deben ser un número entero mayor que cero.");
         }
 
-        $query = "UPDATE equipo SET id_categoria = :id_categoria, id_estado_equipo = :id_estado, codigo_equipo = :codigo, nombre_equipo = :nombre, descripcion_equipo = :descripcion, numero_serie = :numero_serie, fecha_adquisicion = :fecha_adquisicion, cantidad_existencias = :cantidad_existencias WHERE id_equipo = :id";
+        $query = "UPDATE equipo SET id_categoria = :id_categoria, id_estado_equipo = :id_estado, codigo_equipo = :codigo, nombre_equipo = :nombre, descripcion_equipo = :descripcion, numero_serie = :numero_serie, fecha_adquisicion = :fecha_adquisicion, cantidad_existencias = :cantidad_existencias";
+        if (array_key_exists('_imagen_url', $arrayData)) {
+            $query .= ", imagen_url = :imagen_url";
+        }
+        $query .= " WHERE id_equipo = :id";
         $statement = $this->connection->prepare($query);
-        $statement->execute([
+        $parametros = [
             'id' => $id_equipo,
             'id_categoria' => $id_categoria,
             'id_estado' => $id_estado_equipo,
@@ -88,8 +92,11 @@ class M_Equipos
             'numero_serie' => $numero_serie,
             'fecha_adquisicion' => $fecha_adquisicion,
             'cantidad_existencias' => $cantidad_existencias
-        ]);
-        $this->response->success("Equipo actualizado correctamente", [], 1);
+        ];
+        if (array_key_exists('_imagen_url', $arrayData)) {
+            $parametros['imagen_url'] = $arrayData['_imagen_url'];
+        }
+        $statement->execute($parametros);
     }
 
     function DELETE_EQUIPO($id_equipo)

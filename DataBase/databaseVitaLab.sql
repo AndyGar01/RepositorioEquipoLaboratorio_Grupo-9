@@ -62,14 +62,17 @@ CREATE TABLE perfil (
 CREATE TABLE usuario (
     id_usuario INT NOT NULL AUTO_INCREMENT,
     id_perfil INT NOT NULL,
+    id_alumno INT,
     carne_usuario VARCHAR(20),
     nombre_usuario VARCHAR(100) NOT NULL,
     apellido_usuario VARCHAR(100) NOT NULL,
     correo_usuario VARCHAR(150) NOT NULL,
     contrasena_usuario VARCHAR(255) NOT NULL,
+    cambio_contrasena_requerido TINYINT NOT NULL DEFAULT 0,
     activo_usuario TINYINT NOT NULL DEFAULT 1,
     fecha_creacion_usuario DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT pk_usuario PRIMARY KEY (id_usuario),
+    CONSTRAINT uq_usuario_alumno UNIQUE (id_alumno),
     CONSTRAINT fk_usuario_perfil FOREIGN KEY (id_perfil) REFERENCES perfil(id_perfil)
 );
 
@@ -91,6 +94,9 @@ CREATE TABLE alumno (
     CONSTRAINT fk_alumno_estado FOREIGN KEY (id_estado_alumno) REFERENCES estado_alumno(id_estado_alumno)
 );
 
+ALTER TABLE usuario
+    ADD CONSTRAINT fk_usuario_alumno FOREIGN KEY (id_alumno) REFERENCES alumno(id_alumno);
+
 CREATE TABLE estado_prestamo (
     id_estado_prestamo INT NOT NULL AUTO_INCREMENT,
     nombre_estado_prestamo VARCHAR(50) NOT NULL,
@@ -108,6 +114,41 @@ CREATE TABLE prestamo (
     CONSTRAINT fk_prestamo_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario),
     CONSTRAINT fk_prestamo_alumno FOREIGN KEY (id_alumno) REFERENCES alumno(id_alumno),
     CONSTRAINT fk_prestamo_estado FOREIGN KEY (id_estado_prestamo) REFERENCES estado_prestamo(id_estado_prestamo)
+);
+
+CREATE TABLE estado_solicitud_prestamo (
+    id_estado_solicitud INT NOT NULL AUTO_INCREMENT,
+    nombre_estado_solicitud VARCHAR(50) NOT NULL,
+    CONSTRAINT pk_estado_solicitud PRIMARY KEY (id_estado_solicitud),
+    CONSTRAINT uq_estado_solicitud UNIQUE (nombre_estado_solicitud)
+);
+
+CREATE TABLE solicitud_prestamo (
+    id_solicitud INT NOT NULL AUTO_INCREMENT,
+    id_alumno INT NOT NULL,
+    id_estado_solicitud INT NOT NULL,
+    id_usuario_resuelve INT,
+    id_prestamo INT,
+    fecha_solicitud DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    fecha_devolucion_esperada DATE NOT NULL,
+    fecha_resolucion DATETIME,
+    CONSTRAINT pk_solicitud_prestamo PRIMARY KEY (id_solicitud),
+    CONSTRAINT uq_solicitud_prestamo UNIQUE (id_prestamo),
+    CONSTRAINT fk_solicitud_alumno FOREIGN KEY (id_alumno) REFERENCES alumno(id_alumno),
+    CONSTRAINT fk_solicitud_estado FOREIGN KEY (id_estado_solicitud) REFERENCES estado_solicitud_prestamo(id_estado_solicitud),
+    CONSTRAINT fk_solicitud_usuario FOREIGN KEY (id_usuario_resuelve) REFERENCES usuario(id_usuario),
+    CONSTRAINT fk_solicitud_prestamo FOREIGN KEY (id_prestamo) REFERENCES prestamo(id_prestamo)
+);
+
+CREATE TABLE detalle_solicitud_prestamo (
+    id_detalle_solicitud INT NOT NULL AUTO_INCREMENT,
+    id_solicitud INT NOT NULL,
+    id_equipo INT NOT NULL,
+    cantidad_solicitada INT UNSIGNED NOT NULL,
+    CONSTRAINT pk_detalle_solicitud PRIMARY KEY (id_detalle_solicitud),
+    CONSTRAINT uq_detalle_solicitud_equipo UNIQUE (id_solicitud, id_equipo),
+    CONSTRAINT fk_detalle_solicitud_solicitud FOREIGN KEY (id_solicitud) REFERENCES solicitud_prestamo(id_solicitud),
+    CONSTRAINT fk_detalle_solicitud_equipo FOREIGN KEY (id_equipo) REFERENCES equipo(id_equipo)
 );
 
 CREATE TABLE detalle_prestamo (
@@ -261,6 +302,11 @@ INSERT INTO estado_prestamo (id_estado_prestamo, nombre_estado_prestamo) VALUES
 (3, 'Incompleto'),
 (4, 'No pagó');
 
+INSERT INTO estado_solicitud_prestamo (id_estado_solicitud, nombre_estado_solicitud) VALUES
+(1, 'Pendiente'),
+(2, 'Aprobada'),
+(3, 'Rechazada');
+
 INSERT INTO estado_condicion_devolucion (id_estado_condicion, nombre_estado_condicion_devolucion) VALUES
 (1, 'Dañado'),
 (2, 'Intacto'),
@@ -269,6 +315,7 @@ INSERT INTO estado_condicion_devolucion (id_estado_condicion, nombre_estado_cond
 
 INSERT INTO perfil (id_perfil, nombre_perfil, descripcion_perfil, activo_perfil) VALUES
 (1, 'Administrador', 'Acceso a todos los módulos del sistema.', 1),
+(2, 'Alumno', 'Acceso al catálogo y solicitudes de equipo.', 1),
 (3, 'Auditor', 'Perfil de auditoría.', 0),
 (4, 'Pruebas', 'Perfil reservado para pruebas.', 0);
 
@@ -278,7 +325,8 @@ INSERT INTO modulo (id_modulo, nombre_modulo, descripcion_modulo) VALUES
 (3, 'Permisos', 'Administración de permisos.'),
 (4, 'Alumnos', 'Administración de alumnos.'),
 (5, 'Carreras', 'Administración de carreras.'),
-(6, 'Equipos', 'Administración del inventario de equipos.');
+(6, 'Equipos', 'Administración del inventario de equipos.'),
+(7, 'Préstamos', 'Administración de préstamos y solicitudes.');
 
 INSERT INTO perfil_modulo (id_perfil, id_modulo, permiso_ingresar, permiso_actualizar, permiso_eliminar, permiso_consultar)
 SELECT 1, id_modulo, 1, 1, 1, 1 FROM modulo;
@@ -301,3 +349,13 @@ INSERT INTO equipo (id_categoria, id_estado_equipo, codigo_equipo, nombre_equipo
 (4, 1, 'EQ-012', 'Cronómetro', 'Cronómetro digital con memoria de vueltas', 'CR-1201', '2025-09-03', 7, 1),
 (5, 1, 'EQ-013', 'Autoclave', 'Autoclave de sobremesa de 18 litros', 'AC-1301', '2025-09-15', 1, 1),
 (5, 1, 'EQ-014', 'Gradilla', 'Gradilla de metal para 24 tubos de ensayo', 'GR-1401', '2025-10-01', 9, 1);
+
+UPDATE equipo SET imagen_url = 'images/equipos/pipeta.svg' WHERE codigo_equipo = 'EQ-006';
+UPDATE equipo SET imagen_url = 'images/equipos/probeta.svg' WHERE codigo_equipo = 'EQ-007';
+UPDATE equipo SET imagen_url = 'images/equipos/matraz.svg' WHERE codigo_equipo = 'EQ-008';
+UPDATE equipo SET imagen_url = 'images/equipos/mechero.svg' WHERE codigo_equipo = 'EQ-009';
+UPDATE equipo SET imagen_url = 'images/equipos/agitador.svg' WHERE codigo_equipo = 'EQ-010';
+UPDATE equipo SET imagen_url = 'images/equipos/termometro.svg' WHERE codigo_equipo = 'EQ-011';
+UPDATE equipo SET imagen_url = 'images/equipos/cronometro.svg' WHERE codigo_equipo = 'EQ-012';
+UPDATE equipo SET imagen_url = 'images/equipos/autoclave.svg' WHERE codigo_equipo = 'EQ-013';
+UPDATE equipo SET imagen_url = 'images/equipos/gradilla.svg' WHERE codigo_equipo = 'EQ-014';

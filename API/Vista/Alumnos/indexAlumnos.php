@@ -18,9 +18,11 @@
         <div class="botones">
             <button type="submit" id="Agregar_alumno" class="AgregarModificar">Agregar/Modificar</button>
             <button type="button" id="Eliminar_alumno" class="Eliminar">Eliminar</button>
+            <button type="button" id="Acceso_alumno" disabled>Generar clave temporal</button>
             <button type="button" id="Limpiar_alumno">Limpiar</button>
         </div>
     </form>
+    <p id="mensajeAccesoAlumno" class="inventario_mensaje_estado" aria-live="polite"></p>
     <br><br>
     <table border=1 class="contenido">
         <thead>

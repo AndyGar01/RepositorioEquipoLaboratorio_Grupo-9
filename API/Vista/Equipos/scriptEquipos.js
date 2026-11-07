@@ -8,7 +8,7 @@ const escapar = valor => String(valor ?? "").replace(/[&<>"']/g, caracter => ({"
 
 async function solicitar(archivo, metodo = "GET", datos = null){
     const opciones = {method: metodo, cache: "no-store"};
-    if (datos) opciones.body = new URLSearchParams(datos);
+    if (datos) opciones.body = datos instanceof FormData ? datos : new URLSearchParams(datos);
     const respuesta = await fetch(API + archivo, opciones);
     const contenido = await respuesta.json();
     if (!respuesta.ok || contenido.code !== 1) throw new Error(contenido.message || "No se pudo completar la solicitud.");
@@ -85,7 +85,21 @@ function cerrar(id, devolverFoco = true){
     focoAnteriorModal.delete(id);
     if (devolverFoco && elemento?.isConnected && !elemento.disabled) elemento.focus();
 }
-function limpiarEquipo(){ $("#formEquipo").reset(); $("#id_equipo").value = ""; $("#tituloFormularioEquipo").textContent = "Registrar equipo"; }
+let imagenActualEquipo = "";
+function mostrarVistaImagen(ruta, mensaje){
+    const rutaValida = /^images\/equipos\/[a-z0-9_-]+\.(svg|png|jpe?g|webp)$/i.test(String(ruta || "")) || String(ruta || "").startsWith("blob:");
+    $("#vistaImagenEquipo").src = rutaValida ? ruta : "images/equipos/gradilla.svg";
+    $("#vistaImagenEquipo").alt = rutaValida ? "Vista previa de la imagen del equipo" : "Ilustración de referencia del equipo";
+    $("#estadoImagenEquipo").textContent = mensaje;
+}
+
+function limpiarEquipo(){
+    $("#formEquipo").reset();
+    $("#id_equipo").value = "";
+    $("#tituloFormularioEquipo").textContent = "Registrar equipo";
+    imagenActualEquipo = "";
+    mostrarVistaImagen("", "Si no adjuntas una imagen, el catálogo mostrará una ilustración de referencia.");
+}
 
 function mostrarEdicion(item){
     $("#id_equipo").value = item.id;
@@ -97,6 +111,8 @@ function mostrarEdicion(item){
     $("#numero_serie_equipo").value = item.numero_serie || "";
     $("#fecha_adquisicion_equipo").value = item.fecha_adquisicion || "";
     $("#cantidad_existencias").value = item.cantidad_existencias || 1;
+    imagenActualEquipo = item.imagen_url || "";
+    mostrarVistaImagen(imagenActualEquipo || "", imagenActualEquipo ? "Imagen guardada. Para reemplazarla, selecciona otro archivo." : "Este equipo usa una ilustración de referencia.");
     $("#tituloFormularioEquipo").textContent = "Editar equipo";
     cerrar("#ventanaGestionEquipo");
     abrir("#ventanaEquipo");
@@ -136,18 +152,43 @@ document.addEventListener("keydown", evento => {
 
 $("#formEquipo").addEventListener("submit", async evento => {
     evento.preventDefault();
-    const datos = {
+    const datos = new FormData();
+    const campos = {
         id_categoria: $("#id_categoria_equipo").value, id_estado: $("#id_estado_equipo").value,
         codigo: $("#codigo_equipo").value.trim(), nombre: $("#nombre_equipo").value.trim(),
         descripcion: $("#descripcion_equipo").value.trim(), numero_serie: $("#numero_serie_equipo").value.trim(),
         fecha_adquisicion: $("#fecha_adquisicion_equipo").value,
         cantidad_existencias: $("#cantidad_existencias").value
     };
+    Object.entries(campos).forEach(([nombre, valor]) => datos.append(nombre, valor));
     try {
         const id = $("#id_equipo").value;
-        await solicitar("C_Equipos.php", id ? "PUT" : "POST", id ? {id, ...datos} : datos);
+        if (id) {
+            datos.append("id", id);
+            datos.append("_method", "PUT");
+        }
+        const imagen = $("#imagen_equipo").files[0];
+        if (imagen) datos.append("imagen", imagen);
+        await solicitar("C_Equipos.php", "POST", datos);
         cerrar("#ventanaEquipo"); limpiarEquipo(); await cargarEquipos();
     } catch (error) { alert(error.message); }
+});
+
+$("#imagen_equipo").addEventListener("change", () => {
+    const imagen = $("#imagen_equipo").files[0];
+    if (!imagen) {
+        mostrarVistaImagen(imagenActualEquipo, imagenActualEquipo ? "Imagen guardada. Si no eliges otra, se conservará." : "Si no adjuntas una imagen, el catálogo mostrará una ilustración de referencia.");
+        return;
+    }
+    if (imagen.size > 5 * 1024 * 1024) {
+        $("#imagen_equipo").value = "";
+        mostrarVistaImagen(imagenActualEquipo, imagenActualEquipo ? "Imagen guardada. Si no eliges otra, se conservará." : "Si no adjuntas una imagen, el catálogo mostrará una ilustración de referencia.");
+        alert("La imagen no debe superar los 5 MB.");
+        return;
+    }
+    const vista = URL.createObjectURL(imagen);
+    mostrarVistaImagen(vista, "Vista previa: " + imagen.name);
+    $("#vistaImagenEquipo").addEventListener("load", () => URL.revokeObjectURL(vista), {once: true});
 });
 
 $("#Limpiar_equipo").addEventListener("click", limpiarEquipo);

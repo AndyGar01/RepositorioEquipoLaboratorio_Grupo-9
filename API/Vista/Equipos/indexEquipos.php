@@ -49,7 +49,7 @@
         <div class="inventario_modal_contenido">
             <button type="button" class="inventario_cerrar" data-cerrar="ventanaEquipo" aria-label="Cerrar">×</button>
             <h2 id="tituloFormularioEquipo">Registrar equipo</h2>
-            <form id="formEquipo" class="formulario">
+            <form id="formEquipo" class="formulario" enctype="multipart/form-data">
                 <input type="hidden" id="id_equipo" class="idRegistro">
                 <div class="campos">
                     <label>Código<input id="codigo_equipo" maxlength="50" required></label>
@@ -60,7 +60,9 @@
                     <label>Existencias<input type="number" id="cantidad_existencias" min="1" step="1" value="1" required></label>
                     <label>Número de serie (opcional)<input id="numero_serie_equipo" maxlength="100"></label>
                     <label>Fecha de adquisición<input type="date" id="fecha_adquisicion_equipo"></label>
+                    <label class="inventario_imagen_campo" for="imagen_equipo">Imagen del equipo (opcional)<input type="file" id="imagen_equipo" name="imagen" accept="image/jpeg,image/png,image/webp" aria-describedby="ayudaImagenEquipo"><span id="ayudaImagenEquipo">JPG, PNG o WEBP. Tamaño máximo: 5 MB.</span></label>
                 </div>
+                <div class="inventario_imagen_previa"><img id="vistaImagenEquipo" src="images/equipos/gradilla.svg" alt="Vista previa de la imagen del equipo"><p id="estadoImagenEquipo">Si no adjuntas una imagen, el catálogo mostrará una ilustración de referencia.</p></div>
                 <div class="botones"><button type="submit" id="Guardar_equipo" class="AgregarModificar">Guardar equipo</button><button type="button" id="Limpiar_equipo">Limpiar</button></div>
             </form>
         </div>

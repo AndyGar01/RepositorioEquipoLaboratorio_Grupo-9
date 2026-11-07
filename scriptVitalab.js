@@ -1,25 +1,23 @@
 // -------------------- PROTECCION DE SESION ----------------------------
 (function verificarSesion() {
-    const TOKEN_KEY = "vitalab_token";
     const API_LOGIN = "/RepositorioEquipoLaboratorio_Grupo-9/API/Controlador/C_Login.php";
-
-    const token = localStorage.getItem(TOKEN_KEY);
-
-    if (!token) {
-        window.location.replace("login.html");
-        return;
-    }
-
-    fetch(`${API_LOGIN}?token=${encodeURIComponent(token)}`, {
+    fetch(API_LOGIN, {
         method: "GET",
+        credentials: "same-origin",
         cache: "no-store"
     })
     .then(function (r) { return r.json(); })
     .then(function (respuesta) {
         if (!respuesta.data || !respuesta.data.id) {
-            localStorage.removeItem(TOKEN_KEY);
             localStorage.removeItem("vitalab_usuario");
             window.location.replace("login.html");
+            return;
+        }
+        localStorage.setItem("vitalab_usuario", JSON.stringify(respuesta.data));
+        if (Number(respuesta.data.cambio_contrasena_requerido) === 1) {
+            window.location.replace("cambiarContrasena.html");
+        } else if (respuesta.data.perfil_nombre === "Alumno") {
+            window.location.replace("cliente.html");
         }
     })
     .catch(function () {
@@ -275,25 +273,17 @@ NovenoBoton.addEventListener("click",()=>{
 })
 
 
-const usuarioData = JSON.parse(localStorage.getItem("vitalab_usuario"));
+const usuarioData = JSON.parse(localStorage.getItem("vitalab_usuario") || "null") || { nombre: "Usuario", correo: "", perfil_nombre: "Sin perfil" };
 $(".nombre").textContent = usuarioData.nombre;
 $(".email").textContent = usuarioData.correo;
+$(".perfil").textContent = usuarioData.perfil_nombre;
 
-async function CargarNombrePerfil() {
-    let respuesta = await fetch("/SistemaLaboratorios/API/Controlador/C_Perfiles.php");
-    let datos = await respuesta.json();
-    let nombresPerfil = new Map(datos.data.map(p => {
-        return [String(p.id), p.nombre];
-    }));
-    let nombrePerfil = nombresPerfil.get(String(usuarioData.perfil));
-    $(".perfil").textContent = nombrePerfil ?? "Sin perfil";
-}
-
-CargarNombrePerfil();
-
-$(".cerrarSesion").addEventListener("click", () => {
+$(".cerrarSesion").addEventListener("click", async () => {
     if(confirm(`¿Está seguro de cerrar sesión siendo ${usuarioData.nombre}?`)){
-        localStorage.removeItem("vitalab_token");
+        await fetch("/RepositorioEquipoLaboratorio_Grupo-9/API/Controlador/C_Login.php", {
+            method: "DELETE",
+            credentials: "same-origin"
+        });
         localStorage.removeItem("vitalab_usuario");
         window.location.replace("login.html");
         return;

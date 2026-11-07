@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cambiar contraseña | VitaLab</title>
+    <link rel="stylesheet" href="styleCliente.css">
+    <link rel="icon" href="icons/VitaLabCla.ico">
+</head>
+<body class="cliente">
+    <main class="cambio_contenedor">
+        <img src="images/VitaLabOscHor.png" alt="VitaLab, equipo médico y laboratorio">
+        <h1>Actualiza tu contraseña</h1>
+        <p>La clave temporal solo sirve para tu primer ingreso. Elige una contraseña personal para continuar.</p>
+        <form id="formCambioContrasena">
+            <label for="contrasenaActual">Clave temporal o contraseña actual</label>
+            <input type="password" id="contrasenaActual" autocomplete="current-password" required>
+            <label for="contrasenaNueva">Nueva contraseña</label>
+            <input type="password" id="contrasenaNueva" minlength="8" autocomplete="new-password" required>
+            <label for="confirmarContrasena">Confirma la nueva contraseña</label>
+            <input type="password" id="confirmarContrasena" minlength="8" autocomplete="new-password" required>
+            <p id="mensajeCambio" class="cambio_mensaje" aria-live="polite"></p>
+            <button type="submit" id="guardarContrasena">Guardar contraseña</button>
+        </form>
+    </main>
+    <script src="scriptCambioContrasena.js"></script>
+</body>
+</html>

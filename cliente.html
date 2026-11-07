@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de equipos | VitaLab</title>
+    <link rel="stylesheet" href="styleCliente.css">
+    <link rel="icon" href="icons/VitaLabCla.ico">
+</head>
+<body class="cliente">
+    <header class="cliente_encabezado">
+        <a class="cliente_marca" href="cliente.html" aria-label="VitaLab, catálogo de equipos">
+            <img src="images/VitaLabOscHor.png" alt="VitaLab, equipo médico y laboratorio">
+        </a>
+        <nav class="cliente_navegacion" aria-label="Secciones del catálogo">
+            <button type="button" class="cliente_tab activa" id="mostrarCatalogo">Equipos</button>
+            <button type="button" class="cliente_tab" id="mostrarSolicitudes">Mis solicitudes</button>
+        </nav>
+        <div class="cliente_cuenta">
+            <span id="nombreAlumno"></span>
+            <button type="button" id="cerrarSesionCliente">Cerrar sesión</button>
+        </div>
+    </header>
+
+    <main class="cliente_contenido">
+        <section class="cliente_bienvenida" aria-labelledby="tituloCatalogo">
+            <div>
+                <p class="cliente_sobrelinea">Laboratorio · Medicina</p>
+                <h1 id="tituloCatalogo">Catálogo de equipos</h1>
+                <p>Consulta las existencias y envía una solicitud al laboratorio.</p>
+            </div>
+            <img src="images/mascota_vitalab.png" alt="Mascota de VitaLab con una bata y un matraz" class="cliente_mascota">
+        </section>
+
+        <section id="seccionCatalogo" aria-label="Equipos disponibles">
+            <div class="cliente_catalogo_encabezado">
+                <div>
+                    <h2>Equipo disponible</h2>
+                    <p>La entrega se confirma cuando el encargado aprueba tu solicitud.</p>
+                </div>
+                <div class="cliente_filtros">
+                    <label class="solo_lectores" for="buscarCatalogo">Buscar equipo</label>
+                    <input type="search" id="buscarCatalogo" placeholder="Buscar equipo o código">
+                    <label class="solo_lectores" for="categoriaCatalogo">Categoría</label>
+                    <select id="categoriaCatalogo"><option value="">Todas las categorías</option></select>
+                </div>
+            </div>
+            <p class="cliente_mensaje" id="mensajeCatalogo" aria-live="polite"></p>
+            <div class="cliente_catalogo">
+                <div class="cliente_productos" id="listaEquipos"></div>
+                <aside class="cliente_solicitud" aria-labelledby="tituloSolicitud">
+                    <div class="cliente_solicitud_titulo">
+                        <h2 id="tituloSolicitud">Tu solicitud</h2>
+                        <span id="cantidadSeleccionada">0 equipos</span>
+                    </div>
+                    <div id="detalleSeleccion" class="cliente_seleccion_vacia">Agrega equipos para preparar tu solicitud.</div>
+                    <label for="fechaDevolucion">Fecha esperada de devolución</label>
+                    <input type="date" id="fechaDevolucion" required>
+                    <button type="button" id="enviarSolicitud" class="cliente_boton_principal" disabled>Enviar solicitud</button>
+                    <p class="cliente_nota">El encargado revisará las existencias y aprobará la entrega. Enviar la solicitud no reserva el equipo.</p>
+                </aside>
+            </div>
+        </section>
+
+        <section id="seccionSolicitudes" class="oculta" aria-label="Mis solicitudes de equipo">
+            <div class="cliente_catalogo_encabezado">
+                <div>
+                    <h2>Mis solicitudes</h2>
+                    <p>Consulta las solicitudes que enviaste y su estado.</p>
+                </div>
+            </div>
+            <p class="cliente_mensaje" id="mensajeSolicitudes" aria-live="polite"></p>
+            <div class="cliente_lista_solicitudes" id="listaSolicitudes"></div>
+        </section>
+    </main>
+
+    <footer class="cliente_pie">VitaLab · Equipo médico y de laboratorio</footer>
+    <script src="scriptCliente.js"></script>
+</body>
+</html>
