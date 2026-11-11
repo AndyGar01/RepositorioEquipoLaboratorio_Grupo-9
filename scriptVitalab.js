@@ -43,6 +43,7 @@ const SextoBoton = document.getElementById("SextoBoton");
 const SeptimoBoton = document.getElementById("SeptimoBoton");
 const OctavaBoton = document.getElementById("OctavaBoton");
 const NovenoBoton = document.getElementById("NovenoBoton");
+const DecimoBoton = document.getElementById("DecimoBoton");
 
 let $ = (clase) => document.querySelector(clase);
 
@@ -82,6 +83,7 @@ PrimerBoton.addEventListener("click",()=>{
     $("#SeptimaContenido").classList.add("oculto");
     $("#OctavaContenido").classList.add("oculto");
     $("#NovenaContenido").classList.add("oculto");
+    $("#DecimaContenido").classList.add("oculto");
 
     $("#PrimerContenido").classList.remove("oculto");
     $("#SegundoContenido").classList.remove("desplegado");
@@ -92,6 +94,7 @@ PrimerBoton.addEventListener("click",()=>{
     $("#SeptimaContenido").classList.remove("desplegado");
     $("#OctavaContenido").classList.remove("desplegado");
     $("#NovenaContenido").classList.remove("desplegado");
+    $("#DecimaContenido").classList.remove("desplegado");
 })
 
 SegundoBoton.addEventListener("click",()=>{
@@ -104,6 +107,7 @@ SegundoBoton.addEventListener("click",()=>{
     $("#SeptimaContenido").classList.add("oculto");
      $("#OctavaContenido").classList.add("oculto");
      $("#NovenaContenido").classList.add("oculto");
+     $("#DecimaContenido").classList.add("oculto");
 
     $("#PrimerContenido").classList.remove("desplegado");
     $("#SegundoContenido").classList.remove("oculto");
@@ -114,6 +118,7 @@ SegundoBoton.addEventListener("click",()=>{
     $("#SeptimaContenido").classList.remove("desplegado");
     $("#OctavaContenido").classList.remove("desplegado");
     $("#NovenaContenido").classList.remove("desplegado");
+    $("#DecimaContenido").classList.remove("desplegado");
 })
 
 TercerBoton.addEventListener("click",()=>{
@@ -126,6 +131,7 @@ TercerBoton.addEventListener("click",()=>{
     $("#SeptimaContenido").classList.add("oculto");
      $("#OctavaContenido").classList.add("oculto");
      $("#NovenaContenido").classList.add("oculto");
+     $("#DecimaContenido").classList.add("oculto");
 
     $("#PrimerContenido").classList.remove("desplegado");
     $("#SegundoContenido").classList.remove("desplegado");
@@ -136,6 +142,7 @@ TercerBoton.addEventListener("click",()=>{
     $("#SeptimaContenido").classList.remove("desplegado");
     $("#OctavaContenido").classList.remove("desplegado");
     $("#NovenaContenido").classList.remove("desplegado");
+    $("#DecimaContenido").classList.remove("desplegado");
 })
 
 CuartoBoton.addEventListener("click",()=>{
@@ -148,6 +155,7 @@ CuartoBoton.addEventListener("click",()=>{
     $("#SeptimaContenido").classList.add("oculto");
      $("#OctavaContenido").classList.add("oculto");
      $("#NovenaContenido").classList.add("oculto");
+     $("#DecimaContenido").classList.add("oculto");
 
     $("#PrimerContenido").classList.remove("desplegado");
     $("#SegundoContenido").classList.remove("desplegado");
@@ -158,6 +166,7 @@ CuartoBoton.addEventListener("click",()=>{
     $("#SeptimaContenido").classList.remove("desplegado");
     $("#OctavaContenido").classList.remove("desplegado");
     $("#NovenaContenido").classList.remove("desplegado");
+    $("#DecimaContenido").classList.remove("desplegado");
 })
 
 QuintoBoton.addEventListener("click",()=>{
@@ -170,6 +179,7 @@ QuintoBoton.addEventListener("click",()=>{
     $("#SeptimaContenido").classList.add("oculto");
      $("#OctavaContenido").classList.add("oculto");
      $("#NovenaContenido").classList.add("oculto");
+     $("#DecimaContenido").classList.add("oculto");
 
     $("#PrimerContenido").classList.remove("desplegado");
     $("#SegundoContenido").classList.remove("desplegado");
@@ -180,6 +190,7 @@ QuintoBoton.addEventListener("click",()=>{
     $("#SeptimaContenido").classList.remove("desplegado");
     $("#OctavaContenido").classList.remove("desplegado");
     $("#NovenaContenido").classList.remove("desplegado");
+    $("#DecimaContenido").classList.remove("desplegado");
 })
 
 SextoBoton.addEventListener("click",()=>{
@@ -192,6 +203,7 @@ SextoBoton.addEventListener("click",()=>{
     $("#SeptimaContenido").classList.add("oculto");
      $("#OctavaContenido").classList.add("oculto");
      $("#NovenaContenido").classList.add("oculto");
+     $("#DecimaContenido").classList.add("oculto");
 
     $("#PrimerContenido").classList.remove("desplegado");
     $("#SegundoContenido").classList.remove("desplegado");
@@ -202,6 +214,7 @@ SextoBoton.addEventListener("click",()=>{
     $("#SeptimaContenido").classList.remove("desplegado");
     $("#OctavaContenido").classList.remove("desplegado");
     $("#NovenaContenido").classList.remove("desplegado");
+    $("#DecimaContenido").classList.remove("desplegado");
     
 })
 
@@ -215,6 +228,7 @@ SeptimoBoton.addEventListener("click",()=>{
     $("#SeptimaContenido").classList.add("desplegado");
     $("#OctavaContenido").classList.add("oculto");
     $("#NovenaContenido").classList.add("oculto");
+    $("#DecimaContenido").classList.add("oculto");
 
     $("#PrimerContenido").classList.remove("desplegado");
     $("#SegundoContenido").classList.remove("desplegado");
@@ -225,6 +239,7 @@ SeptimoBoton.addEventListener("click",()=>{
     $("#SeptimaContenido").classList.remove("oculto");
     $("#OctavaContenido").classList.remove("desplegado");
     $("#NovenaContenido").classList.remove("desplegado");
+    $("#DecimaContenido").classList.remove("desplegado");
 })
 
 OctavaBoton.addEventListener("click",()=>{
@@ -237,6 +252,7 @@ OctavaBoton.addEventListener("click",()=>{
     $("#SeptimaContenido").classList.add("oculto");
     $("#OctavaContenido").classList.add("desplegado");
     $("#NovenaContenido").classList.add("oculto");
+    $("#DecimaContenido").classList.add("oculto");
 
     $("#PrimerContenido").classList.remove("desplegado");
     $("#SegundoContenido").classList.remove("desplegado");
@@ -247,6 +263,8 @@ OctavaBoton.addEventListener("click",()=>{
     $("#SeptimaContenido").classList.remove("desplegado");
     $("#OctavaContenido").classList.remove("oculto");
     $("#NovenaContenido").classList.remove("desplegado");
+    $("#DecimaContenido").classList.remove("desplegado");
+    document.dispatchEvent(new Event("actualizarEquipos"));
 })
 
 
@@ -260,6 +278,7 @@ NovenoBoton.addEventListener("click",()=>{
     $("#SeptimaContenido").classList.add("oculto");
     $("#OctavaContenido").classList.add("oculto");
     $("#NovenaContenido").classList.add("desplegado");
+    $("#DecimaContenido").classList.add("oculto");
 
     $("#PrimerContenido").classList.remove("desplegado");
     $("#SegundoContenido").classList.remove("desplegado");
@@ -270,6 +289,34 @@ NovenoBoton.addEventListener("click",()=>{
     $("#SeptimaContenido").classList.remove("desplegado");
     $("#OctavaContenido").classList.remove("desplegado");
     $("#NovenaContenido").classList.remove("oculto");
+    $("#DecimaContenido").classList.remove("desplegado");
+    document.dispatchEvent(new Event("actualizarPrestamos"));
+})
+
+
+DecimoBoton.addEventListener("click",()=>{
+    $("#PrimerContenido").classList.add("oculto");
+    $("#SegundoContenido").classList.add("oculto");
+    $("#TercerContenido").classList.add("oculto");
+    $("#CuartoContenido").classList.add("oculto");
+    $("#QuintoContenido").classList.add("oculto");
+    $("#SextaContenido").classList.add("oculto");
+    $("#SeptimaContenido").classList.add("oculto");
+    $("#OctavaContenido").classList.add("oculto");
+    $("#NovenaContenido").classList.add("oculto");
+    $("#DecimaContenido").classList.add("desplegado");
+
+    $("#PrimerContenido").classList.remove("desplegado");
+    $("#SegundoContenido").classList.remove("desplegado");
+    $("#TercerContenido").classList.remove("desplegado");
+    $("#CuartoContenido").classList.remove("desplegado");
+    $("#QuintoContenido").classList.remove("desplegado");
+    $("#SextaContenido").classList.remove("desplegado");
+    $("#SeptimaContenido").classList.remove("desplegado");
+    $("#OctavaContenido").classList.remove("desplegado");
+    $("#NovenaContenido").classList.remove("desplegado");
+    $("#DecimaContenido").classList.remove("oculto");
+    document.dispatchEvent(new Event("actualizarDevoluciones"));
 })
 
 
@@ -406,3 +453,18 @@ async function MantenimientoPrestamos(){
 }
 
 MantenimientoPrestamos();
+
+/*------------------------------------------------------------------CRUD DE DEVOLUCIONES------------------------------------------------------------------*/
+
+async function MantenimientoDevoluciones(){
+    const respuesta = await fetch("API/Vista/Devoluciones/indexDevoluciones.php");
+    $(".contenedor_devoluciones").innerHTML = await respuesta.text();
+
+    VerificarModulo($(".contenedor_devoluciones"));
+
+    const script = document.createElement("script");
+    script.src = "API/Vista/Devoluciones/scriptDevoluciones.js";
+    document.body.appendChild(script);
+}
+
+MantenimientoDevoluciones();

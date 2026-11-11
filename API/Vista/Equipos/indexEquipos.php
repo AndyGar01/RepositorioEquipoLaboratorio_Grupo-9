@@ -27,7 +27,7 @@
     <div class="inventario_tabla_scroll">
         <table class="contenido inventario_tabla" aria-describedby="ayudaSeleccion">
             <caption class="solo_lectores">Inventario de equipo médico y de laboratorio</caption>
-            <thead><tr><th scope="col">Código</th><th scope="col">Equipo</th><th scope="col">Categoría</th><th scope="col">Número de serie</th><th scope="col">Existencias</th><th scope="col">Estado</th><th scope="col">Adquisición</th></tr></thead>
+            <thead><tr><th scope="col">Código</th><th scope="col">Equipo</th><th scope="col">Categoría</th><th scope="col">Número de serie</th><th scope="col">Existencias</th><th scope="col">En reparación</th><th scope="col">Estado</th><th scope="col">Adquisición</th></tr></thead>
             <tbody id="tablaEquipo"></tbody>
         </table>
     </div>

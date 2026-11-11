@@ -261,6 +261,7 @@ $("#tablaSolicitudesPendientes").addEventListener("keydown", evento => {
 $("#Aprobar_solicitud").addEventListener("click", () => ResolverSolicitud("aprobar"));
 $("#Rechazar_solicitud").addEventListener("click", () => ResolverSolicitud("rechazar"));
 
+document.addEventListener("actualizarPrestamos", () => { LlenarEquipos(); Cargar_Prestamos(); Cargar_Solicitudes_Pendientes(); });
 LimitarFecha();
 LlenarAlumnos();
 LlenarEquipos();

@@ -22,7 +22,7 @@ class M_Prestamos
 
     function SELECT_EQUIPOS_DISPONIBLES()
     {
-        $query = "SELECT e.id_equipo AS id, e.id_categoria, c.nombre_categoria AS categoria, e.codigo_equipo AS codigo, e.nombre_equipo AS nombre, e.cantidad_existencias, e.cantidad_existencias - COALESCE((SELECT SUM(dp.cantidad_prestada) FROM detalle_prestamo dp INNER JOIN prestamo p ON p.id_prestamo = dp.id_prestamo INNER JOIN estado_prestamo ep ON ep.id_estado_prestamo = p.id_estado_prestamo WHERE dp.id_equipo = e.id_equipo AND LOWER(ep.nombre_estado_prestamo) = 'en proceso'), 0) AS cantidad_disponible FROM equipo e INNER JOIN categoria_equipo c ON c.id_categoria = e.id_categoria INNER JOIN estado_equipo s ON s.id_estado_equipo = e.id_estado_equipo WHERE e.activo = 1 AND LOWER(s.nombre_estado_equipo) = 'existente' ORDER BY e.nombre_equipo, e.codigo_equipo";
+        $query = "SELECT e.id_equipo AS id, e.id_categoria, c.nombre_categoria AS categoria, e.codigo_equipo AS codigo, e.nombre_equipo AS nombre, e.cantidad_existencias, e.cantidad_existencias - COALESCE((SELECT SUM(dp.cantidad_prestada) FROM detalle_prestamo dp INNER JOIN prestamo p ON p.id_prestamo = dp.id_prestamo INNER JOIN estado_prestamo ep ON ep.id_estado_prestamo = p.id_estado_prestamo WHERE dp.id_equipo = e.id_equipo AND LOWER(ep.nombre_estado_prestamo) = 'en proceso'), 0) - COALESCE((SELECT SUM(dd.cantidad_afectada - dd.cantidad_reparada) FROM detalle_devolucion dd INNER JOIN detalle_prestamo dpr ON dpr.id_detalle = dd.id_detalle_prestamo WHERE dpr.id_equipo = e.id_equipo), 0) AS cantidad_disponible FROM equipo e INNER JOIN categoria_equipo c ON c.id_categoria = e.id_categoria INNER JOIN estado_equipo s ON s.id_estado_equipo = e.id_estado_equipo WHERE e.activo = 1 AND LOWER(s.nombre_estado_equipo) = 'existente' ORDER BY e.nombre_equipo, e.codigo_equipo";
         $statement = $this->connection->prepare($query);
         $statement->execute();
         $result = $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -86,7 +86,7 @@ class M_Prestamos
 
             $ids = array_keys($pedido);
             $marcas = implode(',', array_fill(0, count($ids), '?'));
-            $query = "SELECT e.id_equipo, e.codigo_equipo, e.nombre_equipo, e.activo, e.cantidad_existencias, LOWER(s.nombre_estado_equipo) AS estado, COALESCE((SELECT SUM(dp.cantidad_prestada) FROM detalle_prestamo dp INNER JOIN prestamo p ON p.id_prestamo = dp.id_prestamo WHERE dp.id_equipo = e.id_equipo AND p.id_estado_prestamo = ?), 0) AS prestados FROM equipo e INNER JOIN estado_equipo s ON s.id_estado_equipo = e.id_estado_equipo WHERE e.id_equipo IN ($marcas) FOR UPDATE";
+            $query = "SELECT e.id_equipo, e.codigo_equipo, e.nombre_equipo, e.activo, e.cantidad_existencias, LOWER(s.nombre_estado_equipo) AS estado, COALESCE((SELECT SUM(dp.cantidad_prestada) FROM detalle_prestamo dp INNER JOIN prestamo p ON p.id_prestamo = dp.id_prestamo WHERE dp.id_equipo = e.id_equipo AND p.id_estado_prestamo = ?), 0) + COALESCE((SELECT SUM(dd.cantidad_afectada - dd.cantidad_reparada) FROM detalle_devolucion dd INNER JOIN detalle_prestamo dpr ON dpr.id_detalle = dd.id_detalle_prestamo WHERE dpr.id_equipo = e.id_equipo), 0) AS prestados FROM equipo e INNER JOIN estado_equipo s ON s.id_estado_equipo = e.id_estado_equipo WHERE e.id_equipo IN ($marcas) FOR UPDATE";
             $statement = $this->connection->prepare($query);
             $statement->execute(array_merge([$id_estado_proceso], $ids));
             $lista = $statement->fetchAll(PDO::FETCH_ASSOC);
