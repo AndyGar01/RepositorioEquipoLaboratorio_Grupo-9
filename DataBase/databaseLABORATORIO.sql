@@ -145,6 +145,9 @@ CREATE TABLE detalle_devolucion (
     id_devolucion INT NOT NULL,
     id_detalle_prestamo INT NOT NULL,
     id_estado_condicion INT NOT NULL,
+    cantidad_devuelta INT UNSIGNED NOT NULL DEFAULT 0,
+    cantidad_afectada INT UNSIGNED NOT NULL DEFAULT 0,
+    cantidad_reparada INT UNSIGNED NOT NULL DEFAULT 0,
     observaciones TEXT,
     CONSTRAINT pk_detalle_devolucion PRIMARY KEY (id_detalle_devolucion),
     CONSTRAINT uq_detdev_detprestamo UNIQUE (id_devolucion, id_detalle_prestamo),
@@ -210,7 +213,7 @@ CREATE TABLE configuracion_mora (
 CREATE TABLE mora (
     id_mora INT NOT NULL AUTO_INCREMENT,
     id_prestamo INT NOT NULL,
-    id_configuracion_mora INT NOT NULL,
+    id_configuracion_mora INT NULL,
     dias_retraso_mora INT NOT NULL,
     total_mora DECIMAL(10,2) NOT NULL,
     fecha_calculo_mora DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -233,6 +236,27 @@ CREATE TABLE bitacora (
     ip_bitacora VARCHAR(45),
     CONSTRAINT pk_bitacora PRIMARY KEY (id_bitacora),
     CONSTRAINT fk_bitacora_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
+);
+
+CREATE TABLE tarifa_cobro (
+    id_tarifa INT NOT NULL AUTO_INCREMENT,
+    concepto_tarifa VARCHAR(30) NOT NULL,
+    monto_tarifa DECIMAL(10,2) NOT NULL,
+    activo_tarifa TINYINT NOT NULL DEFAULT 1,
+    CONSTRAINT pk_tarifa_cobro PRIMARY KEY (id_tarifa),
+    CONSTRAINT uq_tarifa_concepto UNIQUE (concepto_tarifa)
+);
+
+CREATE TABLE notificacion (
+    id_notificacion INT NOT NULL AUTO_INCREMENT,
+    id_usuario INT NOT NULL,
+    id_equipo INT NOT NULL,
+    mensaje_notificacion VARCHAR(150) NOT NULL,
+    leida_notificacion TINYINT NOT NULL DEFAULT 0,
+    fecha_notificacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT pk_notificacion PRIMARY KEY (id_notificacion),
+    CONSTRAINT fk_notificacion_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario),
+    CONSTRAINT fk_notificacion_equipo FOREIGN KEY (id_equipo) REFERENCES equipo(id_equipo)
 );
 
 INSERT INTO carrera_alumno (id_carrera_alumno, nombre_carrera_alumno, descripcion_carrera_alumno, activo_carrera_alumno)
@@ -267,6 +291,10 @@ INSERT INTO estado_condicion_devolucion (id_estado_condicion, nombre_estado_cond
 (3, 'Incompleto'),
 (4, 'Completo');
 
+INSERT INTO tarifa_cobro (concepto_tarifa, monto_tarifa, activo_tarifa) VALUES
+('Mora', 100.00, 1),
+('Daño', 150.00, 1);
+
 INSERT INTO perfil (id_perfil, nombre_perfil, descripcion_perfil, activo_perfil) VALUES
 (1, 'Administrador', 'Acceso a todos los módulos del sistema.', 1),
 (3, 'Auditor', 'Perfil de auditoría.', 0),
@@ -278,7 +306,9 @@ INSERT INTO modulo (id_modulo, nombre_modulo, descripcion_modulo) VALUES
 (3, 'Permisos', 'Administración de permisos.'),
 (4, 'Alumnos', 'Administración de alumnos.'),
 (5, 'Carreras', 'Administración de carreras.'),
-(6, 'Equipos', 'Administración del inventario de equipos.');
+(6, 'Equipos', 'Administración del inventario de equipos.'),
+(7, 'Préstamos', 'Registro de préstamos de equipo.'),
+(8, 'Devoluciones', 'Registro de devoluciones, cobros y reparaciones.');
 
 INSERT INTO perfil_modulo (id_perfil, id_modulo, permiso_ingresar, permiso_actualizar, permiso_eliminar, permiso_consultar)
 SELECT 1, id_modulo, 1, 1, 1, 1 FROM modulo;
