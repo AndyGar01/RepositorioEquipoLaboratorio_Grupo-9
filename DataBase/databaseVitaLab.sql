@@ -186,6 +186,9 @@ CREATE TABLE detalle_devolucion (
     id_devolucion INT NOT NULL,
     id_detalle_prestamo INT NOT NULL,
     id_estado_condicion INT NOT NULL,
+    cantidad_devuelta INT UNSIGNED NOT NULL DEFAULT 0,
+    cantidad_afectada INT UNSIGNED NOT NULL DEFAULT 0,
+    cantidad_reparada INT UNSIGNED NOT NULL DEFAULT 0,
     observaciones TEXT,
     CONSTRAINT pk_detalle_devolucion PRIMARY KEY (id_detalle_devolucion),
     CONSTRAINT uq_detdev_detprestamo UNIQUE (id_devolucion, id_detalle_prestamo),
@@ -251,7 +254,7 @@ CREATE TABLE configuracion_mora (
 CREATE TABLE mora (
     id_mora INT NOT NULL AUTO_INCREMENT,
     id_prestamo INT NOT NULL,
-    id_configuracion_mora INT NOT NULL,
+    id_configuracion_mora INT NULL,
     dias_retraso_mora INT NOT NULL,
     total_mora DECIMAL(10,2) NOT NULL,
     fecha_calculo_mora DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -274,6 +277,27 @@ CREATE TABLE bitacora (
     ip_bitacora VARCHAR(45),
     CONSTRAINT pk_bitacora PRIMARY KEY (id_bitacora),
     CONSTRAINT fk_bitacora_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
+);
+
+CREATE TABLE tarifa_cobro (
+    id_tarifa INT NOT NULL AUTO_INCREMENT,
+    concepto_tarifa VARCHAR(30) NOT NULL,
+    monto_tarifa DECIMAL(10,2) NOT NULL,
+    activo_tarifa TINYINT NOT NULL DEFAULT 1,
+    CONSTRAINT pk_tarifa_cobro PRIMARY KEY (id_tarifa),
+    CONSTRAINT uq_tarifa_concepto UNIQUE (concepto_tarifa)
+);
+
+CREATE TABLE notificacion (
+    id_notificacion INT NOT NULL AUTO_INCREMENT,
+    id_usuario INT NOT NULL,
+    id_equipo INT NOT NULL,
+    mensaje_notificacion VARCHAR(150) NOT NULL,
+    leida_notificacion TINYINT NOT NULL DEFAULT 0,
+    fecha_notificacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT pk_notificacion PRIMARY KEY (id_notificacion),
+    CONSTRAINT fk_notificacion_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario),
+    CONSTRAINT fk_notificacion_equipo FOREIGN KEY (id_equipo) REFERENCES equipo(id_equipo)
 );
 
 INSERT INTO carrera_alumno (id_carrera_alumno, nombre_carrera_alumno, descripcion_carrera_alumno, activo_carrera_alumno)
@@ -313,6 +337,10 @@ INSERT INTO estado_condicion_devolucion (id_estado_condicion, nombre_estado_cond
 (3, 'Incompleto'),
 (4, 'Completo');
 
+INSERT INTO tarifa_cobro (concepto_tarifa, monto_tarifa, activo_tarifa) VALUES
+('Mora', 100.00, 1),
+('Daño', 150.00, 1);
+
 INSERT INTO perfil (id_perfil, nombre_perfil, descripcion_perfil, activo_perfil) VALUES
 (1, 'Administrador', 'Acceso a todos los módulos del sistema.', 1),
 (2, 'Alumno', 'Acceso al catálogo y solicitudes de equipo.', 1),
@@ -326,7 +354,8 @@ INSERT INTO modulo (id_modulo, nombre_modulo, descripcion_modulo) VALUES
 (4, 'Alumnos', 'Administración de alumnos.'),
 (5, 'Carreras', 'Administración de carreras.'),
 (6, 'Equipos', 'Administración del inventario de equipos.'),
-(7, 'Préstamos', 'Administración de préstamos y solicitudes.');
+(7, 'Préstamos', 'Administración de préstamos y solicitudes.'),
+(8, 'Devoluciones', 'Registro de devoluciones, cobros y reparaciones.');
 
 INSERT INTO perfil_modulo (id_perfil, id_modulo, permiso_ingresar, permiso_actualizar, permiso_eliminar, permiso_consultar)
 SELECT 1, id_modulo, 1, 1, 1, 1 FROM modulo;
@@ -337,7 +366,12 @@ VALUES (2, 1, '9959-23-3070', 'Oscar', 'Morales', 'oscar@miumg.edu.gt ', '$2y$10
 INSERT INTO alumno (id_alumno, id_carrera_alumno, id_estado_alumno, carne_alumno, nombre_alumno, apellido_alumno, correo_alumno, fecha_nacimiento_alumno, activo_alumno, fecha_registro_alumno) VALUES
 (4, 1, 1, '9959233071', 'Oscarito', 'Morales', 'oscar@miumg.edu.ght', '2026-10-20', 1, '2026-10-20 10:07:48'),
 (5, 1, 1, '9959233117', 'Andre', 'Gonzales', 'andre@gmail.com', '2026-10-22', 1, '2026-10-22 22:30:04'),
-(8, 1, 1, '9959233070', 'Prueba', 'Pruebita', 'prueba@gmail.com', '2026-10-23', 1, '2026-10-23 16:38:51');
+(8, 1, 1, '9959233070', 'Prueba', 'Pruebita', 'prueba@gmail.com', '2026-10-23', 1, '2026-10-23 16:38:51'),
+(9, 1, 1, '9959233201', 'Mariana', 'Lopez', 'mariana.lopez@gmail.com', '2000-01-01', 1, '2026-11-10 08:00:00'),
+(10, 1, 1, '9959233202', 'Carlos', 'Mendez', 'carlos.mendez@gmail.com', '2000-01-01', 1, '2026-11-10 08:00:00'),
+(11, 1, 1, '9959233203', 'Lucia', 'Perez', 'lucia.perez@gmail.com', '2000-01-01', 1, '2026-11-10 08:00:00'),
+(12, 1, 1, '9959233204', 'Jorge', 'Ramirez', 'jorge.ramirez@gmail.com', '2000-01-01', 1, '2026-11-10 08:00:00'),
+(13, 1, 1, '9959233205', 'Ana', 'Castillo', 'ana.castillo@gmail.com', '2000-01-01', 1, '2026-11-10 08:00:00');
 
 INSERT INTO equipo (id_categoria, id_estado_equipo, codigo_equipo, nombre_equipo, descripcion_equipo, numero_serie, fecha_adquisicion, cantidad_existencias, activo) VALUES
 (1, 1, 'EQ-006', 'Pipeta', 'Pipeta automática de 100 a 1000 microlitros', 'PP-6001', '2025-06-10', 12, 1),

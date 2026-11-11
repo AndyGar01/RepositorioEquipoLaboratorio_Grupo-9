@@ -348,7 +348,7 @@ section .wave.wave4 {
     display: block;
 }
 
-.SegundaSeccion, .TercerSeccion, .CuartaSeccion, .QuintaSeccion, .SextaSeccion, .SeptimaSeccion, .OctavaSeccion, .NovenaSeccion {
+.SegundaSeccion, .TercerSeccion, .CuartaSeccion, .QuintaSeccion, .SextaSeccion, .SeptimaSeccion, .OctavaSeccion, .NovenaSeccion, .DecimaSeccion {
     display: none;
 }
 
@@ -821,7 +821,9 @@ section .wave.wave4 { z-index: -4; }
 }
 
 .inventario .inventario_tabla th:nth-child(5),
-.inventario .inventario_tabla td:nth-child(5) {
+.inventario .inventario_tabla td:nth-child(5),
+.inventario .inventario_tabla th:nth-child(6),
+.inventario .inventario_tabla td:nth-child(6) {
     text-align: center;
 }
 
@@ -1491,4 +1493,35 @@ main > section:has(> .wave) {
     .prestamo_acciones_solicitud button {
         flex: 1 1 100%;
     }
+}
+
+
+/*---------------------------------------------------------------PESTAÑAS DE DEVOLUCIONES---------------------------------------------------------------*/
+
+.pestanas_devolucion {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.pestana_devolucion {
+    padding: 10px 22px;
+    font-size: 15px;
+    cursor: pointer;
+    border: 1px solid #068988;
+    border-radius: 6px;
+    background: #FFFFFF;
+    color: #068988;
+}
+
+.pestana_devolucion.activa {
+    background: #068988;
+    color: #FFFFFF;
+}
+
+#panelReparaciones .scroll_tabla,
+#panelNotificaciones .scroll_tabla {
+    max-height: 45vh;
 }

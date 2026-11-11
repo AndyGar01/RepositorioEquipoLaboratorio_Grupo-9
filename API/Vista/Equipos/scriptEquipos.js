@@ -66,7 +66,7 @@ function dibujarEquipos(){
     $("#Gestionar_equipo").disabled = !equipoSeleccionado;
     $("#tablaEquipo").innerHTML = lista.map(item => `<tr data-equipo="${item.id}" tabindex="0" aria-keyshortcuts="Enter Space" aria-selected="${String(item.id) === equipoSeleccionado}" class="${String(item.id) === equipoSeleccionado ? "equipo_seleccionado" : ""}">
         <td>${escapar(item.codigo)}</td><td>${escapar(item.nombre)}</td><td>${escapar(item.categoria)}</td>
-        <td>${escapar(item.numero_serie || "Sin número")}</td><td>${Number(item.cantidad_existencias || 0)}</td>
+        <td>${escapar(item.numero_serie || "Sin número")}</td><td>${Number(item.cantidad_existencias || 0)}</td><td>${Number(item.en_reparacion || 0)}</td>
         <td>${escapar(item.estado)}</td><td>${escapar(item.fecha_adquisicion || "—")}</td>
     </tr>`).join("");
     $("#mensajeInventario").textContent = lista.length ? "" : "No hay equipos que coincidan con la búsqueda.";
@@ -311,4 +311,5 @@ $("#Eliminar_estado").addEventListener("click", async () => {
 });
 
 Promise.all([cargarCatalogos(), cargarEquipos()]).catch(error => { $("#mensajeInventario").textContent = error.message; });
+document.addEventListener("actualizarEquipos", () => cargarEquipos().catch(error => { $("#mensajeInventario").textContent = error.message; }));
 })();
