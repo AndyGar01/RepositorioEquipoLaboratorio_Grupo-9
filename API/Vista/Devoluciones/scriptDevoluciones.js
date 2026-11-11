@@ -23,6 +23,10 @@ function SinTildes(texto){
     return texto.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 }
 
+function Escapar(texto){
+    return String(texto ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
+
 function Quetzales(valor){
     return "Q" + Number(valor).toFixed(2);
 }
@@ -42,7 +46,7 @@ async function Cargar_Pendientes(){
         pendientes = respuesta.data;
         let opciones = `<option value="">Seleccione un préstamo</option>`;
         for (let i=0; i<pendientes.length; i++){
-            opciones += `<option value="${pendientes[i].id}">${pendientes[i].id} - ${pendientes[i].alumno} (${pendientes[i].equipos})</option>`;
+            opciones += `<option value="${Escapar(pendientes[i].id)}">${Escapar(pendientes[i].id)} - ${Escapar(pendientes[i].alumno)} (${Escapar(pendientes[i].equipos)})</option>`;
         }
         $("#id_prestamo_devolucion").innerHTML = opciones;
     } catch (error) {
@@ -79,11 +83,11 @@ function dibujarEquipos(){
         $("#totalDevolucion").textContent = "";
         return;
     }
-    let opciones = `<option value="">Seleccione</option>` + condiciones.map(item => `<option value="${item.id}">${item.nombre}</option>`).join("");
-    $("#tablaEquiposDevolucion").innerHTML = prestamo.equipos.map(item => `<tr data-id="${item.id_detalle}">
-        <td>${item.codigo}</td><td>${item.nombre}</td><td>${item.cantidad_prestada}</td>
-        <td><input type="number" name="afectada" min="0" max="${item.cantidad_prestada}" value="0" style="width:70px"></td>
-        <td><select name="condicion" disabled>${opciones}</select></td>
+    let opciones = `<option value="">Seleccione</option>` + condiciones.map(item => `<option value="${Escapar(item.id)}">${Escapar(item.nombre)}</option>`).join("");
+    $("#tablaEquiposDevolucion").innerHTML = prestamo.equipos.map(item => `<tr data-id="${Escapar(item.id_detalle)}">
+        <td>${Escapar(item.codigo)}</td><td>${Escapar(item.nombre)}</td><td>${Escapar(item.cantidad_prestada)}</td>
+        <td><input type="number" name="afectada" aria-label="Unidades dañadas o incompletas de ${Escapar(item.nombre)}" min="0" max="${Number(item.cantidad_prestada)}" value="0" style="width:70px"></td>
+        <td><select name="condicion" aria-label="Condición de ${Escapar(item.nombre)}" disabled>${opciones}</select></td>
         </tr>`).join("");
     let retraso = Number(prestamo.prestamo.dias_retraso);
     $("#infoPrestamoDevolucion").textContent = `Alumno: ${prestamo.prestamo.alumno} | Fecha esperada: ${prestamo.prestamo.fecha_devolucion_esperada} | ` + (retraso > 0 ? `Entrega con ${retraso} día(s) de retraso.` : "Entrega a tiempo.");
@@ -153,12 +157,12 @@ async function Cargar_Reparaciones(){
         reparaciones = respuesta.data;
         let filas = "";
         for (let i=0; i<reparaciones.length; i++){
-            filas += `<tr data-id="${reparaciones[i].id}">
-            <td>${reparaciones[i].id_prestamo}</td>
-            <td>${reparaciones[i].codigo} - ${reparaciones[i].nombre}</td>
-            <td>${reparaciones[i].condicion}</td>
-            <td>${reparaciones[i].pendientes}</td>
-            <td><input type="number" name="reparadas" min="1" max="${reparaciones[i].pendientes}" value="${reparaciones[i].pendientes}" style="width:70px"></td>
+            filas += `<tr data-id="${Escapar(reparaciones[i].id)}">
+            <td>${Escapar(reparaciones[i].id_prestamo)}</td>
+            <td>${Escapar(reparaciones[i].codigo)} - ${Escapar(reparaciones[i].nombre)}</td>
+            <td>${Escapar(reparaciones[i].condicion)}</td>
+            <td>${Escapar(reparaciones[i].pendientes)}</td>
+            <td><input type="number" name="reparadas" aria-label="Unidades reparadas de ${Escapar(reparaciones[i].nombre)}" min="1" max="${Number(reparaciones[i].pendientes)}" value="${Number(reparaciones[i].pendientes)}" style="width:70px"></td>
             <td><button type="button" class="Reparar">Marcar reparado</button></td>
             </tr>`;
         }
@@ -177,9 +181,9 @@ async function Cargar_Notificaciones(){
         let filas = "";
         for (let i=0; i<notificaciones.length; i++){
             let leida = notificaciones[i].leida == 1;
-            filas += `<tr data-id="${notificaciones[i].id}">
-            <td>${notificaciones[i].fecha}</td>
-            <td>${notificaciones[i].mensaje}</td>
+            filas += `<tr data-id="${Escapar(notificaciones[i].id)}">
+            <td>${Escapar(notificaciones[i].fecha)}</td>
+            <td>${Escapar(notificaciones[i].mensaje)}</td>
             <td>${leida ? "Leída" : "Nueva"}</td>
             <td>${leida ? "" : `<button type="button" class="Leer">Marcar leída</button>`}</td>
             </tr>`;

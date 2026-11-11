@@ -1020,13 +1020,20 @@ body:has(.barra_lateral.mini_barra_lateral) .inventario_modal {
     gap: 10px;
 }
 
+main {
+    position: relative;
+    min-height: 100vh;
+    padding-bottom: 120px;
+}
+
 main > section:has(> .wave) {
-    position: fixed;
+    position: absolute;
     z-index: 0;
     right: 0;
     bottom: 0;
     left: 0;
     height: 100px;
+    overflow: hidden;
     pointer-events: none;
 }
 

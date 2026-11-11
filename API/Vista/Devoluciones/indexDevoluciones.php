@@ -8,10 +8,10 @@
     <div id="panelDevolver">
         <form id="formDevolucion" class="formulario">
             <div class="campos">
-                <select id="id_prestamo_devolucion">
+                <select id="id_prestamo_devolucion" aria-label="Préstamo a devolver">
                     <option value="">Seleccione un préstamo</option>
                 </select>
-                <input type="text" id="observaciones_devolucion" maxlength="75" placeholder="Observaciones (opcional)">
+                <input type="text" id="observaciones_devolucion" aria-label="Observaciones de la devolución" maxlength="75" placeholder="Observaciones (opcional)">
             </div>
             <p id="infoPrestamoDevolucion" class="inventario_mensaje_estado" aria-live="polite"></p>
             <div class="scroll_tabla">
