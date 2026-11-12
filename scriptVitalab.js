@@ -95,6 +95,7 @@ PrimerBoton.addEventListener("click",()=>{
     $("#OctavaContenido").classList.remove("desplegado");
     $("#NovenaContenido").classList.remove("desplegado");
     $("#DecimaContenido").classList.remove("desplegado");
+    document.dispatchEvent(new Event("actualizarDashboard"));
 })
 
 SegundoBoton.addEventListener("click",()=>{
@@ -468,3 +469,16 @@ async function MantenimientoDevoluciones(){
 }
 
 MantenimientoDevoluciones();
+
+/*------------------------------------------------------------------DASHBOARD------------------------------------------------------------------*/
+
+async function MantenimientoDashboard(){
+    const respuesta = await fetch("API/Vista/Dashboard/indexDashboard.php");
+    $(".contenedor_dashboard").innerHTML = await respuesta.text();
+
+    const script = document.createElement("script");
+    script.src = "API/Vista/Dashboard/scriptDashboard.js";
+    document.body.appendChild(script);
+}
+
+MantenimientoDashboard();
