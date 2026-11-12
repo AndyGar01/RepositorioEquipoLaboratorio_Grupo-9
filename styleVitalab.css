@@ -1532,3 +1532,339 @@ main > section:has(> .wave) {
 #panelNotificaciones .scroll_tabla {
     max-height: 45vh;
 }
+
+
+/*---------------------------------------------------------------DASHBOARD---------------------------------------------------------------*/
+
+.dashboard_barra {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 14px;
+}
+
+.dashboard_barra .inventario_filtro {
+    width: 220px;
+}
+
+.dashboard .inventario_mensaje_estado {
+    min-height: 0;
+    margin: 0;
+}
+
+.dashboard .inventario_mensaje_estado:empty {
+    display: none;
+}
+
+.dashboard_barra .inventario_mensaje_estado {
+    align-self: center;
+    color: #4D626B;
+}
+
+#mensajeDashboard {
+    margin-top: 12px;
+    color: #8A3030;
+}
+
+#dashboardContenido {
+    margin-top: 18px;
+}
+
+.dashboard_tarjetas {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.inventario button.dashboard_tarjeta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    min-height: 118px;
+    padding: 14px 16px;
+    border: 1px solid #D9D9D9;
+    border-top: 4px solid #068988;
+    border-radius: 6px;
+    background: #FFFFFF;
+    color: #043D59;
+    text-align: left;
+}
+
+.inventario button.dashboard_tarjeta:hover:not(:disabled) {
+    border-color: #D9D9D9;
+    border-top-color: #068988;
+    background: #E8F7F6;
+    color: #043D59;
+}
+
+.inventario button.dashboard_tarjeta.dashboard_tarjeta_alerta,
+.inventario button.dashboard_tarjeta.dashboard_tarjeta_alerta:hover:not(:disabled) {
+    border-top-color: #8A3030;
+}
+
+.dashboard_tarjeta_titulo {
+    font-size: 14px;
+    color: #4D626B;
+}
+
+.dashboard_tarjeta strong {
+    font-size: 34px;
+    font-weight: 500;
+    line-height: 1.1;
+}
+
+.dashboard_tarjeta_alerta strong {
+    color: #8A3030;
+}
+
+.dashboard_tarjeta_detalle {
+    font-size: 13px;
+    color: #4D626B;
+}
+
+.dashboard_cuadricula {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    margin-top: 18px;
+}
+
+.dashboard_panel {
+    min-width: 0;
+    padding: 18px 20px;
+    border: 1px solid #D9D9D9;
+    border-top: 4px solid #068988;
+    border-radius: 6px;
+    background: #FFFFFF;
+}
+
+.dashboard_panel_ancho {
+    grid-column: span 2;
+}
+
+.dashboard_panel h2 {
+    margin: 0 0 2px;
+    color: #043D59;
+    font-size: 20px;
+}
+
+.dashboard_subtitulo {
+    margin: 0 0 14px;
+    color: #4D626B;
+    font-size: 13px;
+}
+
+.dashboard_grafica svg {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.dashboard_leyenda {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    margin: 10px 0 0;
+    padding: 0;
+    list-style: none;
+    color: #043D59;
+    font-size: 13px;
+}
+
+.dashboard_leyenda li {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.dashboard_muestra {
+    flex: 0 0 12px;
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+}
+
+.dashboard_turquesa {
+    background: #068988;
+}
+
+.dashboard_azul {
+    background: #043D59;
+}
+
+.dashboard_rojo {
+    background: #8A3030;
+}
+
+.dashboard_gris {
+    background: #A8B4B8;
+}
+
+.dashboard_dona {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+}
+
+.dashboard_dona svg {
+    flex: 0 0 150px;
+    width: 150px;
+    height: 150px;
+}
+
+.dashboard_dona .dashboard_leyenda {
+    flex-direction: column;
+    margin: 0;
+}
+
+.dashboard_lista {
+    display: grid;
+    gap: 14px;
+    margin: 14px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.dashboard_fila_texto {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 5px;
+    color: #043D59;
+    font-size: 14px;
+}
+
+.dashboard_fila_texto span:last-child {
+    color: #4D626B;
+    white-space: nowrap;
+}
+
+.dashboard_apilada {
+    display: flex;
+    height: 14px;
+    overflow: hidden;
+    border-radius: 3px;
+    background: #E1E7E9;
+}
+
+.dashboard_apilada span {
+    display: block;
+    height: 100%;
+}
+
+.dashboard_pista {
+    height: 10px;
+    overflow: hidden;
+    border-radius: 3px;
+    background: #E1E7E9;
+}
+
+.dashboard_pista span {
+    display: block;
+    height: 100%;
+    background: #068988;
+}
+
+.dashboard_resumen {
+    margin: 0;
+}
+
+.dashboard_resumen div {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 9px 0;
+    border-bottom: 1px solid #E1E7E9;
+    color: #4D626B;
+    font-size: 14px;
+}
+
+.dashboard_resumen dd {
+    margin: 0;
+    color: #043D59;
+    font-weight: 500;
+    text-align: right;
+}
+
+.dashboard_tabla_scroll {
+    width: 100%;
+    max-height: 340px;
+    overflow: auto;
+    border: 1px solid #D9D9D9;
+    border-radius: 5px;
+}
+
+.dashboard .dashboard_tabla {
+    display: table;
+    width: 100%;
+    min-width: 420px;
+    margin: 0;
+    background: #FFFFFF;
+}
+
+.dashboard .dashboard_tabla th,
+.dashboard .dashboard_tabla td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #E1E7E9;
+    text-align: left;
+    vertical-align: top;
+    font-size: 14px;
+}
+
+.dashboard .dashboard_tabla th {
+    position: sticky;
+    top: 0;
+    border: 0;
+    background: #068988;
+    color: #FFFFFF;
+}
+
+.dashboard .dashboard_tabla tbody tr:hover {
+    background: #E8F7F6;
+}
+
+.dashboard_situacion_vencido {
+    color: #8A3030;
+    font-weight: 500;
+}
+
+.dashboard_situacion_proximo {
+    color: #043D59;
+}
+
+.dashboard .dashboard_tabla td.dashboard_vacio_texto,
+.dashboard_lista .dashboard_vacio_texto {
+    color: #4D626B;
+    text-align: center;
+}
+
+@media (max-width: 1100px) {
+    .dashboard_cuadricula {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 700px) {
+    .dashboard_tarjetas {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .dashboard_cuadricula {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .dashboard_panel_ancho {
+        grid-column: auto;
+    }
+
+    .dashboard_barra .inventario_filtro {
+        width: 100%;
+    }
+
+    .dashboard_barra button {
+        flex: 1 1 100%;
+    }
+}

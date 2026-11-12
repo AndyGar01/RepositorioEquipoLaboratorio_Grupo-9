@@ -18,3 +18,7 @@ Para imágenes encontradas en internet, usa archivos propios o que permitan su r
 Importa `DataBase/databaseVitaLab.sql` desde phpMyAdmin para crear la base completa con la vista para alumnos, las solicitudes y el inventario. Este archivo elimina y vuelve a crear la base `vitalab` antes de instalarla.
 
 Los datos de acceso y los registros de ejemplo están en `DataBase/insertos_prueba.txt`; se ejecutan después de importar la base.
+
+## Dashboard
+
+El primer elemento del menú muestra el dashboard del administrador. Las cifras salen directamente de la base de datos y se actualizan solas cada 30 segundos mientras la pantalla está abierta; también se actualizan al entrar al dashboard o con el botón «Actualizar». El filtro de periodo (todo el historial, últimos 30 días, últimos 6 meses o último año) aplica a préstamos, devoluciones, solicitudes y cobros. El inventario, los vencimientos y las solicitudes pendientes siempre muestran el estado actual.
