@@ -1532,3 +1532,46 @@ main > section:has(> .wave) {
 #panelNotificaciones .scroll_tabla {
     max-height: 45vh;
 }
+
+/*---------------------------------------------------------------MODO OSCURO (fondo y contenido)---------------------------------------------------------------*/
+
+body.dark-mode {
+    background-color: #0F1E29;
+}
+
+body.dark-mode main {
+    color: #E6E6E6;
+}
+
+/*equipos conserva sus tarjetas claras*/
+body.dark-mode .contenedor_equipos {
+    padding: 20px;
+    border-radius: 8px;
+    background: #FFFFFF;
+    color: #043D59;
+}
+
+body.dark-mode :is(.contenedor_usuario, .contenedor_modulo, .contenedor_perfil, .contenedor_perfilmodulo, .contenedor_alumno, .contenedor_carrera, .contenedor_prestamos, .contenedor_devoluciones) input,
+body.dark-mode :is(.contenedor_usuario, .contenedor_modulo, .contenedor_perfil, .contenedor_perfilmodulo, .contenedor_alumno, .contenedor_carrera, .contenedor_prestamos, .contenedor_devoluciones) select {
+    border: 1px solid #068988;
+    background-color: #12303F;
+    color: #E6E6E6;
+    color-scheme: dark;
+}
+
+body.dark-mode :is(.contenedor_usuario, .contenedor_modulo, .contenedor_perfil, .contenedor_perfilmodulo, .contenedor_alumno, .contenedor_carrera, .contenedor_prestamos, .contenedor_devoluciones) input::placeholder {
+    color: #9FB3BC;
+}
+
+body.dark-mode :is(.contenedor_usuario, .contenedor_modulo, .contenedor_perfil, .contenedor_perfilmodulo, .contenedor_alumno, .contenedor_carrera, .contenedor_prestamos, .contenedor_devoluciones) .contenido,
+body.dark-mode :is(.contenedor_usuario, .contenedor_modulo, .contenedor_perfil, .contenedor_perfilmodulo, .contenedor_alumno, .contenedor_carrera, .contenedor_prestamos, .contenedor_devoluciones) .contenido td {
+    border-color: #068988;
+}
+
+body.dark-mode :is(.contenedor_usuario, .contenedor_modulo, .contenedor_perfil, .contenedor_perfilmodulo, .contenedor_alumno, .contenedor_carrera, .contenedor_prestamos, .contenedor_devoluciones) .contenido tbody tr:hover {
+    background: #0D3B4A;
+}
+
+body.dark-mode :is(.contenedor_usuario, .contenedor_modulo, .contenedor_perfil, .contenedor_perfilmodulo, .contenedor_alumno, .contenedor_carrera, .contenedor_prestamos, .contenedor_devoluciones) .contenido tbody tr.solicitud-seleccionada {
+    background: #0D3B4A;
+}
